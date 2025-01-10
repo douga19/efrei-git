@@ -1,12 +1,12 @@
 project:
   type: website
-  output-dir: docs
 
 website:
   title: "Versionning et Repository (xin206 - xdev206)"
+  back-to-top-navigation: true
   navbar:
     search: true
-    left:
+    right:
       - href: index.qmd
       - text: Cours
         menu:
@@ -24,6 +24,7 @@ website:
 
 format:
   html:
+    page-layout: full
     theme: cosmo
     linestretch: 1.7
     toc: true
