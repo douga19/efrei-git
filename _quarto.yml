@@ -20,6 +20,7 @@ website:
           - href: tp2.qmd
           - href: tp3.qmd
           - href: tp4.qmd
+  favicon: assets/favicon.png
 
 format:
   html:
