@@ -1,0 +1,291 @@
+# TP2 - Explorer l'historique des commits, annuler des modifications
+
+## Exercice 1 - Initialisation
+
+1. Dans le répertoire `xcs310` créez un répertoire `tp2` et initialisez-y un dépôt git vide. Lors de ce TP nous allons travailler avec le dépôt `tp2`. Pour ce faire nous allons écrire un petit programme python qui fera office d'une petite calulatrice basique.
+
+2. Assurez-vous que vous êtes bien à la racine du répertoire `tp2` puis créez un fichier `reponses.md` dans lequel vous répondrez aux questions de ce TP. Créez également un fichier `.gitignore` et faîtes en sorte que Git ignore le fichier `reponses.md` pour le moment.
+
+::: {.callout-note}
+# Indication
+
+Notez au fur et à mesure vos réponses dans le fichier `reponses.md`. Vous pouvez également y noter les commandes que nous utiliserons dans ce TP.
+:::
+    
+3. Toujours dans le répertoire `tp2`, créez deux fichiers `operation.py` et `calc.py` qui contiendront respectivement les lignes de python ci-après.
+
+    ```{.python filename="operation.py"}
+    def add(a, b):
+        return a + b
+
+    def subtract(a, b):
+        return a - b
+
+    def multiply(a, b):
+        return a * b
+    ```
+
+    ```{.python filename="calc.py"}
+    from operation import *
+
+    if __name__ == "__main__":
+        while True:
+            input_str = input("Enter the calculation (in the format 'num1 operation num2', or 'exit' to exit): ")
+
+            if input_str == "exit":
+                break
+
+            num1, operation, num2 = input_str.split()
+            num1 = int(num1)
+            num2 = int(num2)
+
+            if operation == '+':
+                print(num1, "+", num2, "=", add(num1, num2))
+            elif operation == '-':
+                print(num1, "-", num2, "=", subtract(num1, num2))
+            elif operation == '*':
+                print(num1, "*", num2, "=", multiply(num1, num2))
+            else:
+                print("Invalid operation")
+    ```
+
+4. Observez le contenu des deux fichiers précédents. Vous devrez être en mesure de comprendre le fonctionnement de notre calculatrice. Exécutez le fichier `calc.py` pour vous assurer que tout fonctionne correctement.
+5. Ajoutez une ligne dans le fichier `.gitignore` pour ignorer le répertoire `__pycache__`.
+6. Ajoutez tous les nouveaux fichiers à la zone d'index, puis créez un commit avec le message `"Initial commit"`.
+7. Visualisez l'historique des commits avec la commande `git log`. Vous devriez voir apparaître le commit que vous venez de créer. Copiez ensuite la réponse de votre `git log` dans `reponse.md`.
+    
+::: {.callout-warning}
+Pensez à mettre un petit commentaire contenant le numéro de la question pour chaque réponse dans le fichier `reponses.md`.
+
+:::
+
+8. Nous allons désormais taguer cette version de notre programme. Pour ce faire, créez un tag `v1.0` sur le dernier commit avec la commande:
+   ```bash
+   $ git tag v1.0
+   ```
+
+9.  Regardez à nouveau l'historique des commits avec la commande `git log`. Vous devriez voir apparaître le tag que vous venez de créer. Copiez ensuite la réponse de votre `git log` dans `reponse.md`. Quelles différences remarquez vous entre ce `log` et celui de la question 7 ?
+
+## Exercice 2 - Ajout d'une fonction de division
+
+1. Nous allons désormais ajouter une nouvelle fonctionnalité à notre calculatrice. Pour ce faire, ajoutez les lignes de code suivantes à la fin du fichier `operation.py`:
+
+    ```{.python filename="operation.py"}
+    def divide(a, b):
+        return a / b
+    ```
+
+2. Modifiez ensuite le fichier `calc.py` pour prendre en compte cette nouvelle fonctionnalité: ajoutez les lignes de code suivantes après la ligne 20 du fichier `calc.py`:
+
+    ```{.python filename="calc.py"}
+    elif operation == '/':
+        print(num1, "/", num2, "=", divide(num1, num2))
+    ```
+
+3. Exécutez à nouveau le fichier `calc.py` pour vous assurer que tout fonctionne correctement. Une fois que c'est le cas, ajoutez tous les fichiers modifiés à la zone d'index, puis créez un commit avec le message `"Add divide function"`.
+
+4. Visualisez l'historique des commits avec la commande `git log`. Vous devriez voir apparaître le commit que vous venez de créer. Copiez ensuite la réponse de votre `git log` dans `reponse.md`.
+
+5. Comparez alors votre dernier `log` avec celui de la question 9 de l'exercice précédent. Que remarquez-vous ? Déduire le rôle de la référence `HEAD` dans Git ainsi que le rôle des tags.
+
+## Exercice 3 - Historique condensé
+
+1. La commande `git log` permet d'afficher l'historique des commits. Cependant, il est possible de condenser cet historique en affichant uniquement les informations essentielles de chaque commit. Testez alors les commandes suivantes et observez leurs différences:
+
+    ```bash
+    $ git log --all
+    $ git log --decorate
+    $ git log --oneline
+    $ git log --graph
+    ```
+    
+    Copiez ensuite les réponses de ces `log` dans `reponse.md`.
+
+2. Essayez maintenant de combiner ces commandes pour afficher un historique condensé. Copiez ensuite la réponse de votre `git log` dans `reponse.md`. Puis testez enfin la commande suivante:
+
+    ```bash
+    $ git log --all --decorate --oneline --graph
+    ```
+
+    Notez également réponse de cette commande dans `reponse.md`.
+
+3. Git permet de créer ce que l'on appelle des alias. Ces alias permettent de créer des commandes personnalisées. Par exemple, nous pouvons créer un alias `git adog` qui affichera l'historique des commits de manière condensée (`adog` pour `all`, `decorate`, `oneline`, `graph`). Pour ce faire, exécutez la commande suivante:
+
+    ```bash
+    $ git config --global alias.adog "log --all --decorate --oneline --graph"
+    ```
+
+    Testez ensuite votre nouvel alias avec la commande `git adog`. Désormais, vous pouvez utiliser `git adog` à la place de `git log --all --decorate --oneline --graph`. 
+
+## Exercice 4 - Oups, nous avons fait une erreur
+
+1. Aïe! Nous venons de nous rendre compte que notre fonction `divide` ne fonctionne pas correctement. En effet, si on divise par 0, notre programme plante. 
+
+::: {.callout-warning}
+# Attention
+Ces modifications ne sont pas encore à faire tout de suite! Nous allons d'abord créer des branches pour pouvoir travailler dessus.
+:::
+
+Nous allons résoudre ce problème de la division par 0 en modifiant la fonction `divide` comme suit:
+
+```{.python filename="operation.py"}
+def divide(a, b):
+    try:
+        return a / b
+    except ZeroDivisionError:
+        print("Division by zero is not allowed")
+        return None
+```
+et en modifiant le fichier `calc.py` comme suit à partir de la ligne 20:
+
+```{.python filename="calc.py"}
+elif operation == '/':
+    result = divide(num1, num2)
+    if result is not None:
+        print(num1, "/", num2, "=", result)
+```
+
+2. Nous allons effectuer la correction de notre programme de trois manières différentes: une avec la commande `git checkout`, une avec la commande `git reset` et une dernière avec la commande `git revert`. Pour ce faire, nous allons créer trois branches différentes. Créez alors une branche `fix-checkout`, une branche `fix-reset` et une branche `fix-revert` avec les commandes suivantes:
+
+    ```bash
+    $ git branch fix-checkout
+    $ git branch fix-reset
+    $ git branch fix-revert
+    ```
+
+3. Visualisez l'historique de votre dépôt grâce à la commande `git adog` pour vérifier que les trois branches que nous avons créées sont bien présentes et se situent toutes sur le même commit. Copiez ensuite la réponse de votre `git adog` dans `reponse.md`.
+
+## Exercice 5 - Annuler des modifications avec `git checkout`
+
+1. Placez-vous dans la branche `fix-checkout` avec la commande suivante:
+
+    ```bash
+    $ git checkout fix-checkout
+    ```
+    Vous devriez voir apparaître le message suivant:
+
+    ```bash
+    Switched to branch 'fix-checkout' # ou l'équivalent en français :)
+    ```
+    Visualisez alors le `log` de votre dépôt grâce à la commande `git adog`. Dans la réponse de la commande, quelle information vous permet de vérifier que vous vous trouvez bien sur la branche `fix-checkout` ?
+
+2. La dernière version stable de notre programme est la version taguée `v1.0`. Nous voudrions alors que les fichiers `calc.py` et `operation.py` retrouvent leur état de la version `v1.0`. Exécutez alors la commande suivante:
+
+    ```bash
+    $ git checkout v1.0 calc.py operation.py
+    ```
+
+3. Ouvrez ensuite les fichiers `calc.py` et `operation.py` et vérifiez que les modifications que vous avez apportées dans l'exercice 2 ont bien été annulées, c'est-à-dire que notre calculatrice ne gère plus l'opération de division.  
+
+4. Modifiez ensuite les fichiers `calc.py` et `operation.py` pour corriger le problème de la division par 0 comme indiqué dans l'exercice 4. Testez ensuite le programme pour vérifier que tout fonctionne correctement. 
+
+5. Une fois que c'est fait, ajoutez les fichiers modifiés à la zone d'index, puis créez un commit avec le message `"Fix divide function with git checkout"`. 
+
+6. Visualisez l'historique des commits avec la commande `git adog`. Vous devriez voir apparaître le commit que vous venez de créer. Copiez ensuite la réponse de votre `git adog` dans `reponse.md`.
+
+## Exercice 6 - Annuler des modifications avec `git reset`
+
+1. Placez-vous dans la branche `fix-reset` avec la commande suivante:
+
+    ```bash
+    $ git checkout fix-reset
+    ```
+    Vous devriez voir apparaître le message suivant:
+
+    ```bash
+    Switched to branch 'fix-reset' # ou l'équivalent en français :)
+    ```
+    Visualisez alors le `log` de votre dépôt grâce à la commande `git log`. Dans le `log`, quelle information vous permet de vérifier que vous vous trouvez bien sur la branche `fix-reset` ?
+
+2. Effectuez un `git status` pour vérifier l'état de notre dépôt. Y-a-t-il des fichiers modifiés ? Y-a-t'il des modifications en attente de validation ? 
+
+3. On souhaite maintenant annuler les modifications apportées dans l'exercice 2. Pour ce faire, exécutez la commande suivante:
+
+    ```bash
+    $ git reset --hard HEAD~1
+    ```
+    
+    Cette commande permet de revenir au commit précédent en annulant toutes les modifications apportées depuis le dernier commit. 
+
+4. Observez que les modifications apportées dans l'exercice 2 ont bien été annulées. C'est-à-dire que notre calculatrice ne gère plus l'opération de division et que nous sommes retournés à la version taguée `v1.0`. Vérifiez ceci en effectuant un `git log` et que le `HEAD` et la branche `fix-reset` pointent bien tous les deux sur le commit tagué `v1.0`.
+
+5. Corriger ensuite le problème de la division par 0 comme indiqué dans l'exercice 4. Testez ensuite le programme pour vérifier que tout fonctionne correctement.
+
+6. Une fois que c'est fait, ajoutez les fichiers modifiés à la zone d'index, puis créez un commit avec le message `"Fix divide function with git reset"`.
+
+7. Visualisez l'historique des commits avec la commande `git adog`. Vous devriez voir apparaître le commit que vous venez de créer. Copiez ensuite la réponse de votre `git adog` dans `reponse.md`.
+
+## Exercice 7 - Annuler des modifications avec `git revert`
+
+1. Placez-vous dans la branche `fix-revert` avec la commande suivante:
+
+    ```bash
+    $ git checkout fix-revert
+    ```
+
+    Vous devriez voir apparaître le message suivant:
+
+    ```bash
+    Switched to branch 'fix-revert' # ou l'équivalent en français :)
+    ```
+    Visualisez alors le `log` de votre dépôt grâce à la commande `git adog`. Dans le `log`, quelle information vous permet de vérifier que vous vous trouvez bien sur la branche `fix-revert` ?
+
+2. Annulez les modifications apportées dans l'exercice 2 depuis la branche `fix-revert` avec la commande suivante:
+
+    ```bash
+    $ git revert HEAD
+    ``` 
+    À votre avis pourquoi avons-nous spécifié `HEAD` dans la commande `git revert` ? 
+
+::: {.callout-warning}
+# Attention
+Après cette commande, Git vous demandera de saisir un message de commit dans l'éditeur de texte par défaut. Si vous avez configuré un éditeur, vous pouvez saisir votre message, enregistrer et quitter l'éditeur de texte et terminer la commande. Sinon Git va ouvrir `vim` par défaut. Vous devrez alors saisir votre message de commit dans `vim`. Pour ce faire, appuyez sur la touche `i` pour passer en mode insertion, saisissez votre message de commit, puis appuyez sur la touche `ESC` pour sortir du mode insertion. Enfin, saisissez `:wq` pour enregistrer votre message de commit et quitter l'éditeur de texte.
+
+:::
+
+3. Visualisez ensuite l'historique des commits avec la commande `git log` dans un premier temps. Vous devriez voir apparaître le commit que vous venez de créer. 
+
+4. Nous venons d'annulez les modifications apportées dans l'exercice 2. Cependant, nous souhaitons toujours que notre calculatrice gère l'opération de division. Corriger alors le problème de la division par 0 comme indiqué dans l'exercice 4. Testez ensuite le programme pour vérifier que tout fonctionne correctement.
+
+5. Une fois que c'est fait, ajoutez les fichiers modifiés à la zone d'index, puis créez un commit avec le message `"Fix divide function with git revert"`.
+
+6. Visualisez l'historique des commits avec la commande `git adog`. Vous devriez voir apparaître le commit que vous venez de créer. Copiez ensuite la réponse de votre `git adog` dans `reponse.md`.
+
+## Exercice 8 - Intégration des modifications
+
+Nous sommes désormais en mesure d'intégrer la correction de la fonction `divide` dans la branche `main`. Nous allons utiliser la commande `git merge`. Bien que la correction ait été faite dans trois branches différentes, nous allons effectuer un unique `merge` puisque les corrections apportés sont exactement les mêmes.
+
+::: {.callout-warning}
+# Remarque 
+
+`merge` fera l'objet d'un cours dédié. Nous verrons alors plus en détail son fonctionnement.
+:::
+
+1. Replacez-vous dans la branche principale en exécutant la commande suivante:
+
+    ```bash
+    $ git checkout main
+    ```
+2. Vérifiez que `HEAD` pointe bien sur la branche `main` avec la commande `git adog`. Vous devriez voir que les branches `fix-checkout`, `fix-reset` et `fix-revert` pointent toutes sur le commit tagué `v1.0` et que `HEAD` pointe sur le commit `Add divide function`.
+
+3. Exécutez la commande suivante pour intégrer les modifications de la branche `fix-checkout` dans la branche `main`:
+
+    ```bash
+    $ git merge fix-revert
+    ```
+
+::: {.callout-warning}
+# Remarque
+
+Vous devriez avoir un message indiquant que le `merge` a été effectué en mode fast-forward. Nous verrons plus tard ce que cela signifie.
+:::
+    
+4. Taguez enfin le dernier commit comme étant la version `v2.0` de notre calculatrice et visualisez l'historique des commits avec la commande `git log`. 
+
+## Exercice 9 - Bilan et complétion du fichier `reponses.md`
+
+1. Nous avons désormais terminé ce TP. Effectuez un `git status` pour vérifier que tout est en ordre dans la branche principale. Assurez-vous d'avoir bien noté toutes vos réponses dans le fichier `reponses.md`. Et notez-y les commentaires que vous jugerez utiles sur les différentes commandes que nous avons utilisées dans ce TP.
+2. Retirez ensuite la ligne `reponses.md` du fichier `.gitignore`. Sauvegardez puis ajoutez les fichiers `.gitignore` et `reponses.md` dans la zone d'index.
+3. Créez enfin un commit avec le message `"Solution TP2"`.
+
+<!-- TODO utiliser VsCode pour modifier les fichiers -->

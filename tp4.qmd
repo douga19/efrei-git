@@ -1,0 +1,307 @@
+---
+title: "TP4 - Programming quotes (collaborer sur GitHub)"
+number-sections: true
+---
+
+Lors de ce TP, votre groupe est missionné pour développer une petit programme python qui permet de générer des citations aléatoires. Ce TP vous permettra de vous familiariser avec les fonctionnalités de base ainsi que les bonnes pratiques de la collaboration sur GitHub en utilisant des branches.
+
+::: {.callout-info}
+* Ce TP est à réaliser en groupe de : **3 personnes au minimum** et **4 personnes au maximum**.
+* Chaque membre du groupe se verra attribué un rôle et effectuera la tâche qui lui sera assignée dans le TP. Je vous laisse le choix de la répartition. Mais vous pourrez vous entraider.
+* Les rôles sont les suivants:
+    + `initiateur`
+    + `contributeur-1`
+    + `contributeur-2`
+    + `contributeur-3`
+* Si le groupe est composé de 3 membres, un des membres jouera deux rôles.
+* Un état initial du code vous sera donné. Ensuite des fonctionnalités supplémentaires vous seront demandées.
+* Je vous laisse le soin de bien tester le code pour chaque fonctionnalité à implémenter. 
+* **Une fois chaque fonctionnalité développée et testée, le `contributeur` l'ayant développé créera une Pull Request depuis sa branche vers la branche principale (`main`)**.
+* L'`initiateur` examine, commente si nécessaire, et fusionne les modifications.
+* Il vous sera demandé de `tag` des versions du programme dans le dépôt Github.
+:::
+
+---
+
+## Partie 1: Préliminaires
+
+### Dans Github
+
+1. L'`initiateur` crée un **dépôt privé** sur son compte Github dont le nom sera `quotes-nom-groupe`. Par exemple si l'initiateur est l'étudiant *FOO Bar du groupe B*, le nom de son dépôt sera `quotes-foo-b`. Ce dépôt sera le dépôt principal du TP.
+
+2. L'initiateur ajoutera:
+   - Son enseignant de TP en tant que `collaborator` du dépôt
+   - Tous les membres du groupe en tant que `collaborators` du dépôt avec les droits d'écriture
+
+3. Chaque `contributeur-i` clone le dépôt sur sa machine locale:
+```bash
+git clone https://github.com/[nom-initiateur]/quotes-foo-b.git
+```
+
+4. Le dépôt doit absolument avoir un fichier `README.md` dans lequel on retrouvera:
+    + Les noms et prénoms de chaque membre de l'équipe, ainsi que votre groupe
+    + Les rôles qu'ont pris chaque membre du groupe durant la réalisation du TP
+    + Les branches de fonctionnalités sur lesquelles travaille chaque contributeur
+
+Voici un exemple de README:
+
+```markdown
+# Programming Quote Generator
+
+A python program that generates programming quotes and jokes.
+
+## Contributors
+- `initiator`: FOO Bar Group B
+- `contributor-1`: BAR Foo Group B
+- `contributor-2`: WIZZ Bang B 
+- `contributor-3`: TOTO Titi Group B 
+
+## Feature Branches
+- `contributor-1`: feature/add-quote
+- `contributor-2`: feature/display-quotes
+- `contributor-3`: feature/string-inputs
+```
+
+### Sur votre machine
+
+1. Pour une meilleure lisibilité de l'historique Git, vous pourrez configurer un `alias` pour votre `git log`:
+
+```bash
+git config --global alias.hist "log --pretty=format:'%h %ad | %s%d [%an]' --all --graph --date=short"
+```
+
+2. Chaque contributeur travaillera sur sa propre branche de fonctionnalité. Pour créer et basculer sur une nouvelle branche:
+
+```bash
+git checkout -b feature/nom-fonctionnalite
+```
+
+::: {.callout-info}
+* Pour vérifier sur quelle branche vous vous trouvez:
+```bash
+git branch
+```
+* Pour basculer sur une branche existante:
+```bash
+git checkout nom-branche
+```
+* Pour mettre à jour votre branche locale avec les dernières modifications de `main`:
+```bash
+git checkout main
+git pull
+git checkout votre-branche
+git merge main
+```
+:::
+
+## Partie 2: Initialisation du dépôt
+
+L'`initiateur` ajoutera les fichiers `quotes.txt`, `functions.py` et `main.py` sur la branche `main` dont les contenus initiaux sont les suivants:
+
+`quotes.txt`:
+```{.plaintext filename="quotes.txt"}
+Programmer - An organism that turns caffeine into code
+Why do programmers prefer dark mode? Because light attracts bugs.
+If debugging is the process of removing software bugs, then programming must be the process of putting them in.
+I don't always test my code, but when I do, I do it in production.
+Why do programmers always mix up Christmas and Halloween? Because Oct 31 == Dec 25!
+Why did the programmer quit his job? Because he didn't get arrays.
+Why do programmers prefer iOS development? Because the Swift.
+Why do programmers prefer dogs over cats? Because dogs have fetch and cats have catch.
+Why do programmers hate nature? It has too many bugs.
+There are only 10 types of people in the world: Those who understand binary and those who don't.
+Why did the programmer go broke? Because he lost his domain in a bet.
+Why don't programmers like to go outside? The sunlight causes too many reflections.
+Why did the programmer get stuck in the shower? The instructions said: Lather, Rinse, Repeat.
+Why do programmers prefer dark chocolate? Because it's byte-sized!
+Why did the programmer bring a ladder to the bar? They heard the drinks were on the house.
+```
+
+```{.python filename="functions.py"}
+import random
+
+def load_quotes(filename):
+    quotes = []
+    with open(filename, 'r') as file:
+        lines = file.readlines()
+    for line in lines:
+        line = line.strip()
+        if line:
+            quotes.append(line)
+    return quotes
+
+def random_quote(quotes):
+    random_quote = random.choice(quotes)
+    return random_quote
+
+def print_quote(quote):
+    print(quote)
+
+def view_quotes(quotes):
+    for quote in quotes:
+        print_quote(quote)
+```
+
+```{.python filename="main.py"}
+from functions import *
+
+def menu():
+    print("\n==== Programming Quotes ====")
+    print("1. Random quote")
+    print("2. All quotes")
+    print("3. Exit")
+
+def main():
+    while True:
+        quotes = load_quotes("quotes.txt")
+        menu()
+
+        choice = input("Choose your an action (1-3): ")
+        
+        if choice == "1":
+            print_quote(random_quote(quotes))
+        elif choice == "2":
+            view_quotes(quotes)
+        elif choice == "3":
+            print("Good bye...")
+            break
+        else:
+            print("Invalid input")
+
+if __name__ == "__main__":
+    main()
+```
+
+::: {.callout-success}
+Cette version doit être taguée comme `version-1.0`.
+:::
+
+## Partie 3: Ajout de fonctionnalités
+
+### Fonctionnalité `add-quote`
+
+Le `contributeur-1` créera une branche `feature/add-quote` et implémentera une fonctionnalité `add_quote()` qui permet d'ajouter une citation dans l'application. Pour cela voici les modifications qu'il doit apporter:
+
+`functions.py`: ajout d'une fonction `add_quote()`
+
+```{.python}
+def add_quote(quotes, filename):
+    new_quote = input("Enter a new quote: ")
+    quotes.append(new_quote)
+    
+    with open(filename, 'a') as file:
+        file.write(new_quote)
+```
+
+`main.py`: modification de `menu()` ainsi que de `main()` pour intégrer la fonction `add_quote()`.
+
+::: {.callout-success}
+Une fois que vous avez testé et vérifié le code:
+1. Committez vos changements
+2. Poussez votre branche sur GitHub:
+```bash
+git push origin feature/add-quote
+```
+3. Créez une Pull Request depuis `feature/add-quote` vers `main`
+:::
+
+### Fonctionnalité `display-quotes`
+
+Le `contributeur-2` créera une branche `feature/display-quotes` et implémentera une fonctionnalité `display_quotes()` qui permet d'afficher un certain nombre de citations à la fois. Cette fonctionnalité **va remplacer** l'option "All quotes" du menu. Pour cela voici les modifications qu'il doit apporter:
+
+`functions.py`: ajout d'une fonction `display_quotes()`
+
+```{.python}
+def display_quotes(quotes, count):
+    if count >= len(quotes):
+        print("All Quotes:")
+        view_quotes(quotes)
+    else:
+        print(f"First {count} Quotes:")
+        for i in range(count):
+            print_quote(quotes[i])
+```
+
+`main.py`: modification de `menu()` ainsi que de `main()` pour intégrer la fonction `display_quotes()`. Notez que `display_quote()` attend le paramètre `count` que vous devez donc demander à l'utilisateur. Une manière de le faire est par exemple:
+
+```{.python}
+elif choice == "2": # gestion de display_quotes()
+    count = int(input("Enter the number of quotes to display: "))
+    display_quotes(quotes, count)
+```
+
+::: {.callout-success}
+Une fois que vous avez testé et vérifié le code:
+1. Committez vos changements
+2. Poussez votre branche sur GitHub:
+```bash
+git push origin feature/display-quotes
+```
+3. Créez une Pull Request depuis `feature/display-quotes` vers `main`
+:::
+
+::: {.callout-success}
+Une fois les deux fonctionnalités précédentes fusionnées dans `main`, la version sera taguée comme `version-1.1`
+:::
+
+## Partie 4 : Modifications des inputs
+
+Le `contributeur-3` créera une branche `feature/string-inputs` à partir de `main` et modifiera la `version-1.1` du programme de telle sorte que les inputs de l'utilisateur soient désormais une chaîne de caractères en lieu et en place d'un entier pour le choix de l'action à effectuer.
+
+Seul le fichier `main.py` sera modifié:
+
+```{.python filename="main.py"}
+from functions import *
+
+def menu():
+    print("\n==== Programming Quotes ====")
+    print("random : Random quote")
+    print("display : Display quotes")
+    print("add : Add a new quote")
+    print("exit : Exit the program")
+
+def main():
+    while True:
+        quotes = load_quotes("quotes.txt")
+        menu()
+
+        choice = input(">> ")
+        
+        if choice == "random":
+            print_quote(random_quote(quotes))
+        elif choice == "display":
+            count = int(input("Enter the number of quotes to display: "))
+            display_quotes(quotes, count)
+        elif choice == "add":
+            add_quote(quotes, "quotes.txt")
+        elif choice == "exit":
+            print("Good bye...")
+            break
+        else:
+            print("Invalid input")
+
+if __name__ == "__main__":
+    main()
+```
+
+::: {.callout-success}
+Une fois que vous avez testé et vérifié le code:
+1. Committez vos changements
+2. Poussez votre branche sur GitHub:
+```bash
+git push origin feature/string-inputs
+```
+3. Créez une Pull Request depuis `feature/string-inputs` vers `main`
+:::
+
+::: {.callout-success}
+Une fois le programme modifié et la Pull Request fusionnée dans `main`, la version sera taguée comme `version-2.0`
+:::
+
+::: {.callout-info}
+## Bonnes pratiques pour les branches
+* Créez des branches à partir de la dernière version de `main`
+* Donnez des noms descriptifs à vos branches (ex: `feature/add-quote`)
+* Gardez vos branches à jour en fusionnant régulièrement les changements de `main`
+* Supprimez les branches une fois qu'elles sont fusionnées
+:::

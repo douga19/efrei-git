@@ -1,0 +1,238 @@
+
+# TP1 - Premiers pas avec Git
+
+## 1. Installer Git sur votre machine
+
+Pour installer Git sur votre machine, rendez-vous sur le site officiel de Git et téléchargez la dernière version de Git pour votre système d'exploitation. Suivez les instructions d'installation pour installer Git sur votre machine. Le lien vers le site officiel de Git est le suivant : [https://git-scm.com/downloads](https://git-scm.com/downloads).
+
+::: {.callout-note}
+# Git en ligne de commande
+
+    
+- Dans toute la suite de ce TP, nous allons utiliser Git en ligne de commande. Pour ce faire, vous devez ouvrir un terminal sur votre machine. Si vous êtes sur Windows, vous pouvez utiliser Git Bash pour exécuter les commandes Git. Si vous êtes sur Linux ou Mac, vous pouvez utiliser le terminal intégré à votre système d'exploitation.
+- Devant chaque commande, vous verrez le symbole `$`. Ce symbole représente le prompt de votre terminal. Vous ne devez pas le copier lorsque vous exécutez les commandes Git.
+- Les lignes de commandes précédées du symbole `#` sont des commentaires. Vous ne devez pas les copier lorsque vous exécutez les commandes.
+
+:::
+---
+
+## 2. Configurer Git
+
+1. Ouvrez un terminal (`Git Bash` pour Windows) et exécutez la commande suivante pour vérifier que Git est installé sur votre machine :
+
+    ```bash
+    $ git --version
+    ```
+    Vous devriez voir la version de Git installée sur votre machine.
+
+2. Maintenant, vous devez configurer votre identité Git. Pour ce faire, exécutez les commandes ci-apèrs en remplaçant les valeurs par vos propres informations. Par exemple si votre nom est John Doe et que votre adresse e-mail est `john.doe@email.com`, vous devez executer :
+
+    ```bash
+    $ git config --global user.name "John Doe"
+    $ git config --global user.email "john.doe@email.com"
+    ```
+
+3. Configurez ensuite les fin de ligne. Pour ce faire, exécutez la commande suivante :
+    ```bash
+    $ git config --global core.autocrlf input
+    ```
+Avec cette configuration, les fichiers édités sous windows (fin de ligne = CRLF) seront convertis au format Unix (fin de ligne = LF) lors des commits. Cela permet de partager des fichiers facilement entre Windows et Unix. Voir https://stackoverflow.com/a/1112313
+
+4. Par défaut, l'éditeur de texte utilisé par Git est `vim`. Si vous n'avez pas d'éditeur de texte préféré, vous pouvez utiliser `vim`. Par exemple, si vous utilisez `Visual Studio Code`, vous pouvez exécuter la commande suivante :
+
+    ```bash
+    $ git config --global core.editor "code --wait"
+    ```
+
+5. Nous allons ensuite faire en sorte que le nom de la branche principale de notre dépôt soit `main` au lieu de `master`. Pour ce faire, exécutez la commande suivante :
+
+    ```bash
+    $ git config --global init.defaultBranch main
+    ```
+
+6. Pour vérifier que la configuration a été appliquée, exécutez la commande suivante :
+
+    ```bash
+    $ git config --list
+    ```
+
+    Vous devriez voir la liste des configurations appliquées.
+
+---
+
+## 3. Premier dépôt Git
+
+### 3.1. Initialiser un dépôt Git
+
+1. Dans un premier temps nous allons créer un repertoire `xcs310` dans votre répertoire personnel. Nous allons utiliser ce répertoire pour travailler sur tous les tp de ce cours. Pour ce faire, exécutez la commande suivante :
+
+    ```bash
+    # Commande à exécuter dans votre répertoire personnel
+    $ mkdir xcs310
+    ```
+
+2. Déplacez-vous ensuite dans le répertoire `xcs310` et créer y un nouveau repertoire `tp1`. Enfin déplacez vous dans le répertoire `tp1`. Pour ce faire, exécutez les commandes suivantes :
+
+    ```bash
+    $ cd xcs310
+    $ mkdir tp1
+    $ cd tp1
+    ```
+
+3. Initialisez ensuite un dépôt Git dans le répertoire `tp1` en exécutant la commande suivante :
+
+    ```bash
+    $ git init
+    ```
+    Quels sont les résultats de la commande ? Que peut-on voir dans le répertoire `tp1` ?
+
+::: {.callout-tip}
+Pour voir les fichiers cachés dans le répertoire `tp1`, vous pouvez exécuter la commande suivante :
+
+```bash
+$ ls -a
+```
+:::
+
+4. La commande `git status` permet de voir l'état du dépôt Git. Exécutez la commande suivante :
+
+    ```bash
+    $ git status
+    ```
+    Dans quel état se trouve votre dépôt Git ?
+
+### 3.2. Ajouter des fichiers au dépôt Git et créer un commit
+1. Créez un fichier `hello.py` dans le répertoire `tp1` et ajoutez-y le code suivant :
+
+    ```python
+    print("Hello World!")
+    ```
+    Une fois ce fichier créé, vérifiez l'état de votre dépôt Git en exécutant la commande `git status`. Quelles sont les différences par rapport à l'état précédent ?
+
+2. Ajoutez le fichier `hello.py` à l'index Git en exécutant la commande suivante :
+
+    ```bash
+    $ git add hello.py
+    ```
+    Vérifiez l'état de votre dépôt Git en exécutant la commande `git status`. Quelles sont les différences par rapport à l'état précédent ?
+
+3. Créez un commit pour valider les changements apportés au dépôt Git. Pour ce faire, exécutez la commande suivante :
+
+    ```bash
+    $ git commit -m "Premier commit"
+    ```
+    Vérifiez l'état de votre dépôt Git en exécutant la commande `git status`. Quelles sont les différences par rapport à l'état précédent ?
+
+4. Nous avons désormais un commit dans l'historique de notre dépôt Git. Pour voir l'historique des commits, exécutez la commande suivante :
+
+    ```bash
+    $ git log
+    ```
+    Quelles sont les informations affichées par la commande ?
+
+---
+
+## 4. Déplacer des modifications dans les différentes zones de travail
+
+Toujours dans le répertoire `tp1`, créez un fichier `README.md` et ajoutez-y le contenu suivant :
+
+```markdown
+# TP1 - Premiers pas avec Git
+```
+Enregistrez ensuite le fichier `README.md`. 
+
+1. Dans quelle zone de travail se situe les modifications apportées au fichier `README.md` ? 
+2. Tentez de directement créer un commit pour valider les modifications apportées au fichier `README.md` avec le message `"Ajout du fichier README.md"`. Quel est le résultat de la commande ? Pourquoi ?
+3. Quelle commande permet de déplacer les modifications apportées au fichier `README.md` dans la zone d'index ? Exécutez cette commande.
+4. Déplacez ensuite les modifications apportées au fichier `README.md` depuis l'index vers le dépôt Git avec la commande `git commit`. Utilisez le message `"Ajout du fichier README.md"`.
+5. Listez ensuite l'historique des commits. 
+6. Tirer une conclusion quant au passage des modifications d'une zone de travail à une autre.
+
+---
+
+## 5. Modifications de fichiers 
+
+Nous allons désormais ajouter quelques fichiers python en plus dans notre dépôt et réorganiser les fichiers dans des répertoires. À la racine du répertoire `tp1`, créez un répertoire `src` et déplacez-y le fichier `hello.py` (utilisez un couper/coller).
+
+1. Faites un `git status` pour voir l'état de votre dépôt Git. Que remarquez-vous pour le fichier `hello.py` ?
+2. Supprimez le fichier `hello.py` du dépôt Git avec la commande suivante :
+
+    ```bash
+    $ git rm --cached hello.py
+    ```
+    Faites un `git status` pour voir l'état de votre dépôt Git. Que remarquez-vous pour le fichier `hello.py` ?
+
+::: {.callout-note}
+La commande `git rm --cached` permet de supprimer un fichier du dépôt Git sans le supprimer dans le répertoire de travail. Le fichier `hello.py` est donc toujours présent dans le répertoire `src` mais il n'est plus suivi par Git.
+:::
+
+3. Modifier le contenu du fichier `src/hello.py` pour qu'il affiche de telle sorte que le `print("Hello World")` soit contenue dans une fonction `hello_world()`. Le fichier `hello.py` doit donc contenir le code suivant :
+
+    ```python
+    def hello_world():
+        print("Hello World!")
+    ```
+    Enregistrez ensuite le fichier `hello.py`.
+
+4. Toujours dans le répertoire `src`, créez un fichier `main.py` et ajoutez-y le code suivant :
+
+    ```python
+    from hello import hello_world
+
+    if __name__ == "__main__":
+        hello_world()
+    ```
+    Enregistrez ensuite le fichier `main.py`.
+
+5. Exécutez le fichier `main.py` pour vérifier que le code fonctionne correctement. 
+   
+6. Exécutez ensuite la commande `git status`. Que remarquez-vous ?
+
+7. Ajoutez les fichiers `hello.py` et `main.py` à la zone d'index Git en exécutant la commande suivante (commande à exécuter dans le répertoire `src`):
+
+    ```bash
+    # Pour ce déplacer dans le répertoire src
+    $ cd src
+    # Pour ajouter les fichiers de src dans la zone d'index
+    $ git add *.py
+    ```
+
+::: {.callout-note}
+La commande `git add *.py` permet d'ajouter tous les fichiers dont l'extention est `.py` du répertoire courant à l'index Git.
+:::
+
+8. Validez ensuite les changements apportés au dépôt Git en créant un commit avec le message `"Ajout des fichiers hello.py et main.py"`.
+
+---
+
+## 6. Ignorer des fichiers
+
+Vous l'avez surement remarquez, après avoir exécuté le script `main.py`, un répértoire `__pycache__` a été créé dans le répertoire `src`. Ce répertoire contient des fichiers générés par Python. Nous allons demander à Git de ne pas le suivre. 
+
+1. Déplacez-vous à la racine du répertoire `tp1`. Vérifier le statut de votre dépôt Git pour voir si le répertoire `__pycache__` est toujours mentionné comme étant non suivi par Git.
+
+2. Créez un fichier `.gitignore` à la racine du répertoire `tp1` et ajoutez la ligne suivante dans le fichier `.gitignore` :
+
+    ```bash
+    __pycache__
+    ```
+    Enregistrez ensuite le fichier `.gitignore`.
+    
+::: {.callout-note}
+Le `.` devant le nom du fichier `.gitignore` indique que le fichier est caché, exactement de la même manière que le répertoire `.git` à la racine de notre dépôt est caché.
+:::
+
+3. Ajoutez ensuite le fichier `.gitignore` à l'index Git et créez un commit pour valider les changements apportés au dépôt Git. Utilisez le message `"Ajout du fichier .gitignore"`.
+
+4. Vérifiez ensuite le statut de votre dépôt Git pour voir si le répertoire `__pycache__` est toujours mentionné comme étant non suivi par Git. 
+
+---
+
+## 7. Mettre à jour le fichier README
+Ouvrez le fichier `README.md` puis :
+
+1. Notez dedans les réponses aux questions posées dans les exercices précédents de ce TP. 
+2. Listez également les commandes Git que vous avez utilisées dans ce TP et expliquez à quoi elles servent.
+3. Ajoutez ensuite le fichier `README.md` à l'index Git et créez un commit pour valider les changements apportés au fichier `README.md`. Utilisez le message `"solution TP1"`.
+
+---

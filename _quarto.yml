@@ -1,0 +1,28 @@
+project:
+  type: website
+
+website:
+  title: "Versionning et Repository (xin206 - xdev206)"
+  navbar:
+    search: true
+    left:
+      - href: index.qmd
+      - text: Cours
+        menu:
+          - href: cours1.qmd
+          - href: cours2.qmd
+          - href: cours3.qmd
+          - href: cours4.qmd
+      - text: TPs
+        menu: 
+          - href: tp1.qmd
+          - href: tp2.qmd
+          - href: tp3.qmd
+          - href: tp4.qmd
+
+format:
+  html:
+    theme: cosmo
+    linestretch: 1.7
+    toc: true
+    toc-title: Contenu

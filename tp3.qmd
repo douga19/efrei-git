@@ -1,0 +1,218 @@
+---
+title: "TP3 - Branches et Fusion"
+number-sections: true
+---
+
+## Exercice 1 : Création et navigation entre branches
+
+::: {.callout-tip}
+## Objectif
+S'exercer à créer des branches et naviguer entre elles.
+
+:::
+
+### Mise en place
+
+1. Créez un nouveau dépôt Git :
+
+```{.bash}
+mkdir tp3
+cd tp3
+git init
+```
+
+2. Créez un fichier `README.md` avec le contenu suivant :
+
+```{.markdown}
+# Projet d'exercice
+Version initiale du projet
+```
+
+3. Faites votre premier commit :
+
+```{.bash}
+git add README.md
+git commit -m "Premier commit : création du README"
+```
+
+### Instructions
+
+Réalisez les tâches suivantes :
+
+1. Créez une branche nommée `feature-1`
+2. Créez une branche nommée `feature-2`
+3. Affichez la liste des branches
+4. Déplacez-vous sur `feature-1`
+5. Modifiez le README pour ajouter une ligne "Modification dans feature-1"
+6. Committez ce changement
+7. Retournez sur la branche main
+8. Vérifiez que le README n'a pas la modification
+
+::: {.callout-note}
+## Questions bonus
+- Que se passe-t-il si vous essayez de supprimer une branche sur laquelle vous êtes ?
+- Comment voir les différences entre les branches `main` et `feature-1` ?
+:::
+
+## Exercice 2 : Fusion simple
+
+::: {.callout-tip}
+## Objectif
+Pratiquer la fusion de branches sans conflits.
+:::
+
+### Instructions
+
+1. Partez de la branche `main`
+2. Réalisez les actions suivantes :
+   - Créez une branche `dev`
+   - Dans `dev`, créez un fichier `notes.txt` avec du contenu
+   - Committez ce fichier
+   - Retournez sur `main`
+   - Fusionnez `dev` dans `main`
+   - Vérifiez que le fichier `notes.txt` est bien présent
+   - Supprimez la branche `dev`
+
+## Exercice 3 : Gestion des conflits
+
+::: {.callout-tip}
+## Objectif
+Apprendre à gérer les conflits de fusion.
+:::
+
+### Instructions
+
+1. Créez une nouvelle branche `conflit-test`
+
+2. Sur la branche `main`, modifiez la première ligne du README :
+```{.markdown}
+# Projet d'exercice - Version Main
+```
+
+3. Committez ce changement
+
+4. Basculez sur `conflit-test`
+
+5. Modifiez la même ligne du README différemment :
+```{.markdown}
+# Projet d'exercice - Version Test
+```
+
+6. Committez ce changement
+
+7. Retournez sur `main`
+
+8. Essayez de fusionner `conflit-test` dans `main`
+
+9. Résolvez le conflit en gardant les deux informations :
+```{.markdown}
+# Projet d'exercice - Version Main et Test
+```
+
+## Exercice 4 : Rebase
+
+::: {.callout-tip}
+## Objectif
+Comprendre et pratiquer le rebase.
+:::
+
+### Instructions
+
+1. Créez une branche `feature-rebase`
+2. Dans cette branche :
+   - Ajoutez un fichier `feature.txt`
+   - Faites plusieurs commits
+3. Pendant ce temps, dans `main` :
+   - Faites des modifications différentes
+   - Créez quelques commits
+4. Dans `feature-rebase` :
+   - Faites un rebase sur main
+   - Observez l'historique des commits
+
+## Exercice 5 : Branches et historique
+
+::: {.callout-tip}
+## Objectif
+Pratiquer la visualisation et la compréhension de l'historique Git.
+:::
+
+### Instructions
+
+1. Créez plusieurs branches :
+```{.bash}
+git branch feature-a
+git branch feature-b
+git branch feature-c
+```
+
+2. Dans chaque branche :
+   - Faites au moins deux commits
+   - Utilisez des fichiers différents pour éviter les conflits
+
+3. Fusionnez toutes les branches dans `main`
+
+4. Pratiquez les commandes de visualisation :
+```{.bash}
+git log --all --decorate --oneline --graph
+# ou 'git adog' si vous avez configuré l'alias dans le TP1
+git branch -v
+git branch --merged
+git branch --no-merged
+```
+
+## Notes pratiques
+
+::: {.callout-important}
+## Commandes utiles pour tous les exercices
+
+- Utilisez régulièrement `git status` pour voir l'état de votre dépôt
+- Utilisez `git log --all --decorate --oneline --graph` ou l'alias `git adog` pour visualiser l'historique
+- N'hésitez pas à utiliser `git branch -v` pour voir les derniers commits de chaque branche
+- Si vous vous trompez, vous pouvez toujours utiliser `git reset --hard` pour revenir à un état précédent
+:::
+
+## Solutions communes aux problèmes
+
+::: {.callout-warning}
+## En cas de problème
+
+1. Si vous ne pouvez pas supprimer une branche :
+```{.bash}
+git branch -D nom-branche  # Force la suppression
+```
+
+2. Pour annuler une fusion en cours :
+```{.bash}
+git merge --abort
+```
+
+3. Pour annuler un rebase en cours :
+```{.bash}
+git rebase --abort
+```
+
+4. Pour voir les différences entre deux branches :
+```{.bash}
+git diff branche1..branche2
+```
+
+5. Pour voir quelles branches ont été fusionnées :
+```{.bash}
+git branch --merged
+```
+:::
+
+## Learn Git Branching
+
+Démarrez l'outil "Learn Git Branching" sur l'espace Moodle. 
+
+- Choisissez la langue en bas à droite
+
+- Exercices à faire:
+    - Introduction Sequence
+    - Ramping up
+    - Moving Work Around
+- Les autres exercices sont optionnels
+- Votre score apparaît en haut à gauche et sera enregistré dans Moodle
+
+

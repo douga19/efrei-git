@@ -1,0 +1,61 @@
+---
+title: Syllabus
+---
+
+# Objectifs
+
+- Comprendre les concepts de bases de la gestion de version d'un projet informatique
+- Être capable d'utiliser Git dans le cadre de travaux collaboratifs 
+- Bonnes pratiques, résolution de problèmes, utilisation quotidienne
+
+# Séquencement
+
+Ce module se déroulera en 30 heures de cours sous forme de Cours - TP.
+
+# Cours 1: Introduction au versionnage
+* Présentation des concepts de base du versionnage
+* Comprendre l'importance du versionnage dans la gestion des projets de développement logiciel
+* Expliquer les avantages du versionnage, tels que la gestion des modifications, la collaboration et la traçabilité
+
+### Types d'outils de gestion de version
+* Présenter les différents types de systèmes de gestion de dépôt : décentralisés (comme Git) et centralisés (comme SVN)
+* Comparer les avantages et les inconvénients de chaque type
+
+### Configuration de l'environnement de travail (Git)
+* Guider les étudiants pour installer et configurer l'outil de gestion de dépôt choisi (par exemple, Git) sur leur système
+* Expliquer les commandes de base pour configurer l'identité de l'utilisateur et les préférences de l'outil
+
+
+# Cours 2 : L'historique des commits
+
+## Commandes de base de gestion de dépôt
+* Enseigner les commandes de base du système de gestion de dépôt, telles que la création d'un nouveau dépôt, l'ajout de fichiers, la création de branches, la fusion des branches, etc.
+* Présenter les commandes pour suivre l'historique des modifications et effectuer des opérations de base, comme la création de tags et la révision des modifications
+
+## Gestion des branches et des fusions
+* Expliquer l'importance de la gestion des branches dans les projets de développement
+* Enseigner les techniques de création, de modification et de fusion de branches
+* Expliquer les stratégies de fusion et les bonnes pratiques associées
+
+## Collaboration et gestion de conflits
+
+* Présenter les concepts de collaboration dans un environnement de gestion de dépôt
+* Expliquer les problèmes de conflits qui peuvent survenir lors de la fusion de modifications concurrentes
+* Enseigner les techniques pour résoudre les conflits et assurer une collaboration efficace
+
+# Cours 3 : Travailler avec un dépôt distant
+
+## Utilisation de Github
+* Création d'un dépôt sur Github
+* Collaborer sur un projet Github
+* Issues et Pull request
+
+## Projet 
+* Présenter les bonnes pratiques en matière de gestion de dépôt, telles que l'utilisation de messages de commit clairs, la création de commits atomiques, la documentation du code, etc.
+* Expliquer comment maintenir un historique de version propre et organisé
+* Entraînement à l'utilisation de GIT dans le contexte d'un projet à plusieurs personnes. 
+
+
+# Evaluations
+- Dernière séance: TP noté
+

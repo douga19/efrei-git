@@ -1,0 +1,392 @@
+---
+title: "Cours 3 - Branches et Fusion"
+toc: true
+toc-title: Contenu
+number-sections: true
+---
+
+## Introduction
+
+Dans le dernier cours, nous avons eu un bref aperçu de la notion de branche. Nous avons vu que les branches étaient tout simplement des pointeurs sur des commits et permettaient de travailler sur des versions différentes d'un même projet. Nous allons aborder dans ce cours la manière dont on peut créer et gérer des branches, ainsi que la manière dont on peut fusionner des branches entre elles.
+
+## La commande `git branch`
+
+Une fois que vous initialisez un dépôt git, vous avez une branche par défaut qui est créée. Cette branche s'appelle `main`. Cette branche est la branche principale par défaut de votre projet. La commande `git branch` permet de lister les branches présentes dans votre dépôt. Vous pouvez l'utiliser de la manière suivante :
+
+```{.bash}
+$ git branch
+* main
+```
+
+L'astérisque devant le nom `main` indique que c'est la branche sur laquelle vous êtes actuellement. Ici nous n'avons qu'une seule branche, mais il est possible d'en avoir plusieurs. Nous allons voir comment en créer une nouvelle.
+
+Dans un dépôt Git avec une unique branche, l'historique des commits est une succession linéaire de commits. La création de branche permet de créer, comme son nom l'indique, une branche dans l'arbre des commits et ainsi de créer une nouvelle ligne de développement indépendante de la branche principale. 
+
+Travailler avec les branches présente plusieurs avantages:
+
+* Vous pouvez travailler sur une nouvelle fonctionnalité sans impacter le code de la branche principale.
+* Corriger un bug dans le projet sans impacter le code de la branche principale.
+* Travailler de manière collaborative sur un projet sans impacter le code de la branche principale.
+
+Vous l'aurez compris, les branches sont un élément essentiel de Git car elles permettent de faire évoluer un projet de manière indépendante et **sans impacter le code de la branche principale**.
+
+::: {.callout-tip}
+## Commandes essentielles
+
+* `git branch <nom_branche>` permet de créer une nouvelle branche dans votre dépôt, dont le nom est `nom_branche`.
+* `git branch -d <nom_branche>` permet de supprimer une branche de votre dépôt, dont le nom est `nom_branche`.
+* `git switch <nom_branche>` permet de changer de branche. Vous vous retrouverez sur la branche `nom_branche`.
+:::
+
+### Exemple
+
+Prenons un petit dépôt Git pour illustrer tout ça. Nous avons un dépôt Git avec deux commits dans la branche `main`. Nous allons créer une nouvelle branche `dev` et nous placer dessus. Puis nous allons créer un nouveau commit dans cette branche. Voici le résultat de ces opérations:
+
+```{.bash}
+# Historique initial
+$ git log --all --decorate --oneline --graph
+* fdf4E5b (HEAD -> main) Commit 1
+* 5f6b7d5 Commit 0
+
+# Création de la branche dev
+$ git branch dev
+
+# Historique après la création de la branche dev
+$ git log --all --decorate --oneline --graph
+* fdf4E5b (HEAD -> main, dev) Commit 1
+* 5f6b7d5 Commit 0
+
+# On se place sur la branche dev 
+$ git switch dev
+Basculement sur la nouvelle branche 'dev'
+
+# Historique après le checkout
+$ git log --all --decorate --oneline --graph
+* fdf4E5b (HEAD -> dev, main) Commit 1
+* 5f6b7d5 Commit 0
+
+# On crée un nouveau commit dans la branche dev, après avoir fait des modifications
+$ git commit -am "Commit 2"
+
+# Historique après le commit
+$ git log --all --decorate --oneline --graph
+* 42efefD (HEAD -> dev) Commit 2
+* fdf4E5b (main) Commit 1
+* 5f6b7d5 Commit 0
+```
+
+On observe alors que:
+
+* Lors de la création d'une branche, celle-ci est créée à partir du commit où se situe `HEAD` (ici le commit `Commit 1`).
+* Lorsque l'on se déplace sur une branche, `HEAD` se déplace sur le dernier commit de la branche (ici le commit `Commit 1`). `HEAD` va alors pointer sur la branche `dev`.
+* Lorsque l'on crée un nouveau commit dans la branche `dev`, celui-ci est créé à partir du commit où se situe `HEAD` (ici le commit `Commit 1`) de la branche `dev` et déplace `HEAD` et `dev` sur le commit nouvellement créé (ici le commit `Commit 2`). Le dernier commit de `main` reste le commit `Commit 1`.
+
+## Le retour de la commande `git checkout`
+
+Précédemment, nous avons vu que la commande `git checkout` déplacer `HEAD` sur un commit spécifique. Mais comme une branche est un pointeur sur un commit, c'est-à-dire qu'une branche référence un commit (son dernier commit en particulier), la commande `git checkout <nom_branche>` permet également de déplacer `HEAD` sur le dernier commit de la branche `nom_branche`.
+
+La commande `git checkout` permet également de créer une nouvelle branche et de se placer directement dessus. C'est pratique dans les cas où vous voulez revenir dans un commit antérieur de votre projet et créer une nouvelle branche à partir de ce commit. Pour cela, on utilise l'option `-b` de la commande `git checkout`:
+
+::: {.callout-tip}
+## Commande
+`git checkout <reference_commit> -b <nom_branche>` permet de créer une nouvelle branche `nom_branche` à partir du commit référencé par `reference_commit` et de se placer dessus.
+:::
+
+### Exemple
+
+Reprenons notre dépôt Git précédent. Nous avons deux commits dans la branche `main` et un commit dans la branche `dev`. Nous allons nous placer sur le commit `Commit 0` et créer une nouvelle branche `feature` à partir de ce commit. Voici le résultat de ces opérations:
+
+```{.bash}
+# Historique initial
+$ git log --all --decorate --oneline --graph
+* 42efefD (HEAD -> dev) Commit 2
+* fdf4E5b (main) Commit 1
+* 5f6b7d5 Commit 0
+
+# On se place sur le commit 0 et on crée une nouvelle branche feature
+$ git checkout 5f6b7d5 -b feature
+Basculement sur la nouvelle branche 'feature'
+
+# Historique après le checkout
+$ git log --all --decorate --oneline --graph
+* 42efefD (dev) Commit 2
+* fdf4E5b (main) Commit 1
+* 5f6b7d5 (HEAD -> feature) Commit 0
+```
+
+::: {.callout-note}
+Puisque `git checkout` a besoin d'une référence à un commit pour pouvoir déplacer `HEAD`, les références suivantes auraient également fonctionné:
+
+* `git checkout 5f6b7d5 -b feature`
+* `git checkout main^ -b feature`
+* `git checkout main~1 -b feature`
+* `git checkout dev^^ -b feature`
+* `git checkout dev~2 -b feature`
+* `git checkout HEAD^^ -b feature`
+* `git checkout HEAD~2 -b feature`
+:::
+
+## Fusionner des branches
+
+Fusionner deux branches permet de combiner les modifications apportées dans une branche avec une autre branche. La fusion de deux branches se fait toujours dans le sens d'une branche vers une autre branche. On appelera la branche qui reçoit les modifications **branche de destination** et la branche qui fournit les modifications **branche source**. 
+
+Concrètement, l'opération de fusion consiste créer un nouveau commit, appelé **commit de fusion** dans la branche de destination. Ce commit aura comme parent le dernier commit de la branche destination et de la branche source. Faire une fusion permet donc de *fusionner* deux historiques de commits en un seul.
+
+::: {.callout-tip}
+## Commande
+`git merge <nom_branche>` permet de fusionner la branche `nom_branche` dans la branche courante.
+:::
+
+### Exemple
+
+Prenons notre dépôt exemple tel qu'il était avant de créer la branche `feature`. Nous avons deux commits dans la branche `main` et un commit supplémentaire dans la branche `dev`. Dans un premier temps, nous allons créer un commit dans `main`, ensuite allons fusionner la branche `dev` dans la branche `main`. Dans notre exemple `dev` sera la branch source et `main` la branche de destination. Voici le résultat de ces opérations:
+
+```{.bash}
+# Historique initial
+$ git log --all --decorate --oneline --graph
+* 42efefD (HEAD -> dev) Commit 2
+* fdf4E5b (main) Commit 1
+* 5f6b7d5 Commit 0
+
+# On se place d'abord sur main
+$ git switch main
+Basculement sur la branche 'main'
+
+# On crée un nouveau commit dans main
+$ git commit -am "Commit 3"
+
+# Historique après le commit
+$ git log --all --decorate --oneline --graph
+* 42efefD (dev) Commit 2
+| * 8ba1953 (HEAD -> main) Commit 3
+|/
+* fdf4E5b Commit 1
+* 5f6b7d5 Commit 0
+
+# On fusionne la branche dev dans la branche main
+$ git merge dev -m "Commit 4(fusion)"
+
+# Historique après la fusion
+$ git log --all --decorate --oneline --graph
+*   efde87b (HEAD -> main) Commit 4(fusion)
+|\
+| * 42efefD (dev) Commit 2
+* | 8ba1953 Commit 3
+|/
+* fdf4E5b Commit 1
+* 5f6b7d5 Commit 0
+```
+
+::: {.callout-important}
+Dans la pratique, une fois satisfait du travail effectué dans une branche, on la supprime. Cela permet de garder un historique propre et de ne pas avoir trop de branches dans le dépôt. Pour supprimer une branche, on utilise la commande `git branch -d <nom_branche>`. 
+:::
+
+## Réorganiser l'historique avec `git rebase`
+
+::: {.callout-tip}
+## Commande
+Git rebase est une commande qui permet de déplacer ou combiner une séquence de commits vers une nouvelle base (commit). Elle réécrit l'historique du projet en créant de nouveaux commits pour chaque commit de la branche originale.
+
+Elle permet d'avoir un historique *linéaire*.
+:::
+
+1. Comment ça fonctionne réellement :
+- `git rebase` prend les commits d'une branche et les rejoue sur une autre branche
+- Il crée de nouveaux commits avec de nouveaux hashes, même si le contenu est identique
+- Il modifie l'historique du dépôt en créant une nouvelle ligne de commits
+
+2. Différence principale avec merge :
+
+- `merge` crée un nouveau commit qui combine les changements des deux branches.
+- `rebase` réécrit l'historique en déplaçant la base de votre branche
+Le résultat final en termes de contenu est le même, mais l'historique est différent.
+
+
+3. Quand utiliser chaque commande :
+
+- `merge` : pour intégrer des changements tout en préservant l'historique exact
+- `rebase` : pour garder un historique linéaire et plus propre, particulièrement utile pour les branches de fonctionnalités avant de les fusionner dans main
+
+::: {.callout-important}
+N'utilisez jamais rebase sur des commits qui ont déjà été publiés et partagés avec d'autres développeurs, car cela peut créer des problèmes de synchronisation pour l'équipe.
+:::
+
+
+Reprenons notre exemple. On suppose que l'état de notre dépôt est le suivant:
+
+```{.bash}
+# Historique actuel
+$ git log --all --decorate --oneline --graph
+* 80f914d (HEAD -> feature) Commit 6
+* e045507 Commit 5
+| * 830e010 (main) Commit 8
+| * 855796a Commit 7
+|/  
+*   e1838dc (dev) Commit 4(fusion)
+|\  
+| * fdf4723 Commit 2
+* | 8ba1953 Commit 3
+|/  
+* fdf4E5b Commit 1
+* 5f6b7d5 Commit 0
+```
+
+À partir du `Commit 4(fusion)`, une branche `feature` a été créé. Les commits `Commit 5` et `Commit 6` ont été réalisés dans `feature` tandis que `Commit 7` et `Commit 8` ont été faits dans `main`. La branche courante est `feature`.
+
+Nous voudrions par la suite que `main` intègre les modifications apportés dans la branche `feature` avec un `rebase`. Ici `main` est donc notre branche de destination et `feature` notre branche source. On suppose que les commits de `feature` ne présentent aucun conflits avec ceux de `main`. Voici comment procéder:
+
+```{.bash}
+# On se place sur la branche main
+$ git switch main
+Basculement sur la branche 'main'
+
+# On effectue le rebase 
+$ git rebase feature
+
+# Historique après le rebase
+$ git log --all --decorate --oneline --graph
+* 4644c80 (HEAD -> main) Commit 8
+* 7d6c207 Commit 7
+* 830e010 (feature) Commit 6
+* e045507 Commit 5
+*   e1838dc (dev) Commit 4(fusion)
+|\
+| * fdf4723 Commit 2
+* | 8ba1953 Commit 3
+|/
+* fdf4E5b Commit 1
+* 5f6b7d5 Commit 0
+```
+
+Remarquez que les hash des `Commit 7` et `Commit 8` ont changé. En effet, ce sont de nouveaux commits mais avec exactement les mêmes informations avant le `rebase`. Vous pouvez voir `rebase` comme un couper/coller.
+
+Le rebase de `main` dans `feature` coupe tous les commits de `main` qui ne sont pas encore dans `feature` et les colle après `feature`. C'est-à-dire que `main` est déplacé sur le dernier commit de `feature` et que les commits de `main` sont recopiés après `feature`, ainsi tous les commits de `feature` ont été intégrés dans `main`.
+
+::: {.callout-note}
+## En somme
+
+`git rebase <branche_source>` permet de recopier tous les commits de la branche courante sur la branche `branche_source`.
+
+`git rebase <branche_source> <branche_destination>` permet de recopier tous les commits de la branche `branche_source` sur la branche `branche_destination` et déplace `HEAD` sur la branche `branche_destination`.
+:::
+
+## Conflits de fusion
+
+Les **conflits de fusion** (ou **merge conflicts** en anglais) surviennent lorsqu'il y a des modifications concurrentes et incompatibles sur un même fichier dans un système de contrôle de version comme Git. Cela se produit généralement lorsque deux branches différentes ont modifié la même partie du code et que Git ne peut pas résoudre automatiquement les différences.
+
+En d'autres termes, il y a conflit lorsque vous essayez fusionner deux branches alors qu'un fichier contient deux versions différentes sur une ou plusieurs même lignes.
+
+Lorsque Git détecte un conflit de fusion, il marque le fichier conflictuel et vous devez le résoudre manuellement. Voici un scenario type dans lequel les conflits peuvent apparaître et comment les résoudre.
+
+### Scenario type de conflit de fusion
+
+* Vous lancez une fusion par exemple d'une branche `dev` dans une branche `main`.
+* Si Git détecte des conflits, il vous informera que des conflits de fusion se sont produits et il vous indiquera les fichiers conflictuels. À ce stade, Git va tout simplement suspendre la fusion.
+* Vous devez ouvrir chaque fichier conflictuel dans un éditeur de texte. À l'intérieur du fichier, vous verrez des marqueurs de conflit qui ressemblent à ceci :
+
+```{.bash}
+# Ici se trouvent les modifications de la branche `dev` (branche source)
+```
+
+La partie entre `<<<<<<< HEAD` et `=======` correspond aux modifications de la branche principale, et la partie entre `=======` et `>>>>>>> dev` correspond aux modifications de la branche que nous essayons de fusionner.
+
+Prenons alors un exemple pour illustrer tout ça. On suppose que l'on a l'historique suivant:
+
+```{.bash}
+* e0397cd (HEAD -> dev) Commit 3
+| * a518e66 (main) Commit 2
+|/
+* 6177b18 Commit 1
+* e0dbacd Commit 0
+```
+
+Dans ce dépôt il n'y a qu'un unique fichier `README.md` dans lequel on a ajouté pour chaque commit le message du commit. C'est-à-dire qu'au moment du `Commit 0`, le fichier `README.md` contenait uniquement la ligne `Commit 0`. Au moment du `Commit 1`, le fichier `README.md` contenait une ligne `Commit 0` et une ligne `Commit 1`. Et actuellement, voici le contenu du fichier `README.md`:
+
+**Dans main:**
+```markdown
+Commit 0
+Commit 1
+Commit 2
+```
+
+**Dans dev:**
+```markdown
+Commit 0
+Commit 1
+Commit 3
+```
+
+On remarque bien qu'à la ligne 3, les deux fichiers contiennent des informations différentes. Essayons donc de fusionner `dev` dans `main` et observons le résultat.
+
+```{.bash}
+$ git switch main
+Basculement sur la branche 'main'
+
+$ git merge dev
+Fusion automatique de README.md
+CONFLIT (contenu) : Conflit de fusion dans README.md
+La fusion automatique a échoué ; réglez les conflits et validez le résultat.
+```
+
+Git nous indique que le fichier conflictuel est le fichier `README.md`. Ouvrons-le et observons son contenu:
+
+```markdown
+Commit 0
+Commit 1
+<<<<<<< HEAD
+Commit 2
+=======
+Commit 3
+>>>>>>> dev
+```
+
+La ligne `Commit 2` est la ligne de la branche `main` et la ligne `Commit 3` est la ligne de la branche `dev`. 
+
+### Résolution des conflits
+
+Vous devez modifier **manuellement** le contenu du fichier pour résoudre les conflits. Vous pouvez choisir de garder uniquement les modifications de la branche principale, uniquement les modifications de la branche à fusionner, ou combiner les deux selon vos besoins. Supprimez également les marqueurs de conflit `<<<<<<< HEAD`, `=======` et `>>>>>>> dev` une fois que vous avez terminé la résolution.
+
+Après avoir résolu le conflit, il vous faut enregistrer les modifications et ajouter le fichier résolu à la zone d'index. Vous pouvez ensuite finaliser la fusion en effectuant un commit.
+
+::: {.callout-warning}
+Il est important de noter que les conflits de fusion peuvent être complexes et nécessitent souvent une compréhension approfondie du code et des intentions des modifications. Il est recommandé de prendre le temps d'analyser soigneusement les conflits et de consulter les membres de l'équipe si nécessaire pour prendre des décisions éclairées lors de la résolution des conflits.
+:::
+
+Reprenons notre exemple. Nous allons résoudre le conflit en gardant les deux lignes. Voici le résultat:
+
+```markdown
+Commit 0
+Commit 1
+Commit 2
+Commit 3
+```
+
+Nous pouvons alors ajouter le fichier résolu à la zone d'index et finaliser la fusion en effectuant un commit.
+
+```{.bash}
+# Après la résolution du conflit, on ajoute le fichier résolu à la zone d'index
+$ git add README.md
+
+# On finalise la fusion en effectuant un commit
+$ git commit -m "Commit 4(fusion)"
+
+# Historique après la fusion
+$ git log --all --decorate --oneline --graph
+*   1f2b6b6 (HEAD -> main) Commit 4(fusion)
+|\
+| * e0397cd (dev) Commit 3
+* | a518e66 Commit 2
+|/
+* 6177b18 Commit 1
+* e0dbacd Commit 0
+```
+
+## Pour aller plus loin
+
+::: {.callout-note}
+## Ressources supplémentaires
+
+* [Documentation officielle de Git sur les branches](https://git-scm.com/book/fr/v2/Les-branches-avec-Git-Les-branches-en-bref)
+* [Documentation officielle de Git sur la fusion](https://git-scm.com/book/fr/v2/Les-branches-avec-Git-Branches-et-fusions%C2%A0%3A-les-bases)
+* [Documentation officielle de Git sur le rebase](https://git-scm.com/book/fr/v2/Les-branches-avec-Git-Rebaser-Rebasing)
+:::

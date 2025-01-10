@@ -1,0 +1,250 @@
+---
+title: Cours 2 - L'historique des commits
+toc: true
+toc-title: Contenu
+number-sections: true
+---
+
+À partir de maintenant, et pour tout le reste du cours, nous allons travailler avec Git. Nous allons aborder dans ce chapitre l'historique des commits de la manière dont Git le voit. Dans ce cours nous allons voir comment explorer l'historique des commits, comment modifier l'historique des commits, comment annuler des modifications, etc.
+
+::: {.callout-note}
+
+L'*historique des commits*, ou *graphe des commits* est l'historique de notre projet Git. C'est le résultat que nous donne la commande `git log`.
+
+<img src="assets/commit-tree.png" alt="Concepts de base du versionnage" height="400px">
+:::
+
+## Éléments de l'historique des commits
+
+### Commit
+
+::: {.callout-note}
+# Définition
+Dans le contexte du versionnage, un *commit* est tout simplement une *version* de notre projet. C'est une sauvegarde de l'état de notre projet à un moment donné. Vous pouvez voir un commit comme une *photo* (snapshot) de votre projet à un instant T (à l'instant où le commit a été créé).
+
+:::
+
+Dans Git, un commit est une structure de données qui contient plusieurs informations dont:
+
+* des métadonnées (identifiant ou **hash**, auteur, date, message, )
+* une référence vers un ou plusieurs commits parents
+* une copie de l'arborescence du projet au moment du commit
+
+La commande `git commit` permet donc de créer un nouveau commit et de l'apposer au bon endroit sur le graphe des commits.
+
+Analysons donc le résultat d'un `git log` dans un dépôt après un premier commit. Nous allons afficher le numéro de ligne pour pouvoir se repérer plus facilement.
+
+```{.bash filename="Exemple de résultat de git log" code-line-numbers="true"}
+$ git log
+commit 5be88b053a645728062548258ecbf531aadbcb95 (HEAD -> main)
+Author: Linus Torvalds <torvalds@mail.com>
+Date:   Wed Jan 10 10:50:22 2024 +0100
+
+    Initial commit
+```
+
+Voyons ces informations à la loupe:
+
+- À la ligne 2, on retrouve une longue chaîne de caractères : `5be88b053a645728062548258ecbf531aadbcb95` qui indique le *hash* ou l'identifiant du commit (c'est un *identifiant unique* du commit). Git le génère en utilisant l'algorithme SHA-1.
+- Puis juste après `(HEAD -> main)`. Nous allons voir plus tard ce que cela signifie.
+- À la ligne 3 nous avons les informations sur l'auteur du commit `Author: Linus Torvalds <torvalds@mail.com>`.
+- Puis à la ligne 4, `Date:   Wed Jan 10 10:50:22 2024 +0100`, on nous indique la date à laquelle le commit a été créé, c'est-à-dire que ce commit sauvegarde l'état de notre dépôt à ce moment précis.
+-  Enfin à la ligne 6, la chaîne de caractères `Initial commit` indique le message associé à ce commit. Généralement il faut bien décrire les changements apportés dans ce commit pour pouvoir facilement se repérer dans l'historique.
+
+### Branche
+
+::: {.callout-note}
+# Définition
+
+Une *branche* est une ligne de développement indépendante. C'est une suite de commits qui se suivent et qui ont un point commun : ils ont tous été créés à partir du même commit. C'est-à-dire que tous les commits d'une branche ont un ancêtre commun.
+
+:::
+
+On ne peut pas parler de l'historique des commits sans parler de branches. Nous avons vu que l'historique des commits est un graphe dont les sommets sont des commits. Quand on créé une nouvelle branche, nous créons un point de divergence au niveau dernier commit. C'est-à-dire que les commits suivants vont prendre des chemins différents selon la branche dans laquelle ils appartiennent.
+
+::: {.callout-note}
+Dans Git, une branche est une **pointeur** vers un commit. Ou si vous préférez, une branche est une **étiquette** qui référence un commit.
+
+:::
+
+Nous allons parler en détail des branches dans le prochain chapitre. Pour l'instant, nous allons juste voir comment Git représente les branches dans l'historique des commits.
+
+Nous sommes alors en mesure de comprendre la ligne 
+```bash
+commit 5be88b053a645728062548258ecbf531aadbcb95 (HEAD -> main)
+```
+du `git log` précédent: `main` référence le commit dont le hash est `5be88b053a645728062548258ecbf531aadbcb95`. C'est-à-dire que `main` est une branche qui pointe sur le commit `5be88b053a645728062548258ecbf531aadbcb95`.
+
+
+### `HEAD` 
+
+::: {.callout-note}
+`HEAD` est une référence spéciale qui référence le commit qui sera le parent du prochain commit. Généralement elle pointe sur la branche courante dans laquelle on se trouve (car on peut la déplacer).
+
+:::
+
+Donc, en reprenant le résultat de notre `git log`:
+
+```{.bash filename="Exemple de résultat de git log" code-line-numbers="true"}
+$ git log
+commit 5be88b053a645728062548258ecbf531aadbcb95 (HEAD -> main)
+Author: Linus Torvalds <torvalds@mail.com>
+Date:   Wed Jan 10 10:50:22 2024 +0100
+
+    Initial commit
+```
+
+On sait que le prochain commit aura comme parent le commit dont le message est `"Initial commit"`. Supposons maintenant que nous apportons des modifications à notre dépôt et que nous procédons ensuite à un commit. Le résultat du `git log` va alors ressembler à quelque chose comme ceci.
+
+```{.bash filename="Exemple de résultat de git log après un deuxième commit"}
+commit fe89c631555f9c8168ed0ded9956f68a536d2c82 (HEAD -> main)
+Author: Linus Torvalds <torvalds@mail.com>
+Date:   Wed Jan 10 10:55:13 2024 +0100
+
+    Set up ci.yml
+
+commit 5be88b053a645728062548258ecbf531aadbcb95
+Author: Linus Torvalds <torvalds@mail.com>
+Date:   Wed Jan 10 10:50:22 2024 +0100
+
+    Initial commit
+```
+
+`HEAD` et `main` référencent désormais le dernier commit. Nous en verrons d'avantage lors du cours sur les branches.
+
+::: {.callout-note}
+# Référence relative à `HEAD`
+
+On peut utiliser la référence relative à `HEAD` pour désigner un commit. Pour rappel, `HEAD` est une référence qui pointe sur le commit qui sera le parent du prochain commit.
+
+Par exemple, pour désigner le commit précédent, on peut utiliser `HEAD^`. Pour le précédent commit du précédent commit, on peut utiliser `HEAD^^` et ainsi de suite. On peut également utiliser `HEAD~n` pour désigner le n-ième commit précédent.
+
+:::
+
+### Références à un commit
+
+Pour désigner un commit, on peut utiliser son hash. Toutefois il n'est pas pratique de retenir les hash des commits. 
+
+* Git nous permet dans un premier temps de n'utiliser que les premiers caractères du hash pour désigner un commit. Par exemple, pour désigner le commit `5be88b053a645728062548258ecbf531aadbcb95`, on peut utiliser `5be88b0`. Git va alors chercher le commit qui commence par `5be88b0` et qui est le plus récent.
+* On peut également utiliser les références relatives à `HEAD` comme nous l'avons vu précédemment.
+* Il existe également les `tag` qui sont des références qui pointent sur un commit spécifique. Nous en parlerons plus tard dans le TP associé à ce cours.
+
+## Explorer et modifier l'historique des commits
+
+Git offre plusieurs manières pour explorer et modifier l'historique des commits. De manière générale, nous voulons nous déplacer dans l'historique des commits pour soit revenir à un état antérieur de notre projet soit pour annuler des modifications.
+
+Les principales commandes à notre disposition sont les commandes `git reset`, `git checkout` et `git revert`. Toutes vous permettent d'annuler certains types de changement dans votre dépôt. De plus, on peut utiliser les deux premières pour gérer des commits ou des fichiers individuels.
+
+Comme elles sont très similaires, veillez à ne pas les confondre : **à chaque scénario sa commande !**. Nous allons comparer les scénarios d'utilisation les plus courantes de `git reset`, `git checkout` et `git revert`.
+
+Voyons donc en détail l'effet qu'on chacune de ces commandes. Nous allons prendre le graphe des commits suivant comme exemple:
+
+```bash
+C0 <- C1 <- C2 <- main <- HEAD
+```
+
+::: {.callout-note}
+
+Ici `C0`, `C1` et `C2` dénotent les hash des commits.
+:::
+
+
+### 1. `git checkout`
+
+::: {.callout-note}
+# Commande
+
+`git checkout` permet de déplacer `HEAD` vers un commit spécifique. C'est-à-dire que `HEAD` va pointer sur le commit spécifié.
+
+:::
+
+`git checkout` permet de déplacer `HEAD` vers un commit spécifique. Elle peut prendre en paramètre un le hash d'un commit, une branche ou un tag. Elle peut également être utilisée dans un périmètre de fichier, c'est-à-dire qu'on peut l'appliquer au niveau d'un certains nombre de fichiers pour que les versions de ces fichiers correspondent à celles d'un commit spécifique. Par exemple,
+
+
+* La commande `git checkout C0` a pour effet:
+```bash
+HEAD
+ |
+ v
+C0 <- C1 <- C2 <- main
+```
+* Tandis que la commande: 
+```bash
+git checkout C1 toto.py readme.md
+```
+va restaurer les fichiers `toto.py` et `readme.md` de la branche `main` à leur version au moment du commit `C1`.
+
+
+
+### 2. `git reset`
+
+::: {.callout-note}
+# Commande
+`git reset` permet de déplacer la branche courante (`HEAD`) et les pointeurs de branche vers un commit spécifique. Elle est généralement utilisée pour annuler ou réorganiser les commits dans l'historique. 
+
+:::
+
+Il existe trois formes principales de `git reset` et qui s'utilisent avec les options suivantes:
+
+* `git reset --soft <référence à un commit>` : 
+    - déplace HEAD et la branche courante au commit spécifié
+    - conserve les modifications dans la zone d'index 
+    - préserve les modifications dans le répertoire de travail.
+    - utile lorsqu'on veut modifier son dernier commit
+
+* `git reset --mixed <référence à un commit>` : (*par défaut*) 
+    - déplace HEAD et la branche courante au commit spécifié
+    - réinitialise la zone d'index
+    - préserve les modifications dans le répertoire de travail.
+    - utile lorsqu'on veut combiner plusieurs commits, ou réorganiser les changements avant de committer à nouveau
+
+* `git reset --hard <référence à un commit>` : Annule les commits en réinitialisant à la fois la zone d'index et le répertoire de travail à l'état du commit spécifié. Toutes les modifications non validées sont perdues.
+
+::: {.callout-warning}
+# Attention
+
+* Sans spécifier d'option, `git reset` utilise l'option `--mixed` par défaut.
+* Il est important de noter que `git reset` modifie l'historique des commits, il est donc recommandé de ne pas l'utiliser sur des commits déjà partagés avec d'autres utilisateurs (**À ne pas faire sur une branche distante**).
+* `git reset --hard` **peut vous faire perdre vos modifications**
+
+:::
+
+Sur notre graphe exemple, `git reset C1` aura pour effet:
+```bash
+C0 <- C1 <- main <- HEAD
+```
+
+### 3. `git revert`
+
+::: {.callout-note}
+# Commande
+
+`git revert` permet d'annuler un commit spécifique en créant un nouveau commit qui annule les modifications apportées par le commit précédent. Contrairement à `git reset`, `git revert` ne modifie pas l'historique des commits existants, mais ajoute plutôt un nouveau commit qui annule les modifications spécifiées.
+
+:::
+
+Lorsque vous exécutez `git revert <référence à un commit>`, Git crée un nouveau commit contenant l'inverse des modifications apportées par le commit spécifié. Cela signifie que les modifications initiales restent dans l'historique, mais elles sont neutralisées par le nouveau commit de réversion.
+
+L'avantage de `git revert` est qu'il est sûr à utiliser sur des commits déjà partagés, car il n'altère pas l'historique existant. Cependant, il peut entraîner un historique de commits plus complexe avec des commits de réversion supplémentaires.
+
+Par exemple, `git revert C2` créera donc un commit `C3` qui va neutraliser les modifications apportées par `C2`. Cette commande aura donc comme effet:
+
+```bash
+C0 <- C1 <- C2 <- C3 <- main <- HEAD
+                  *           
+            (C3 annule C2)
+```    
+
+::: {.callout-note}
+# En somme
+
+
+* Un `checkout` est une opération qui permet de déplacer`HEAD` vers un commit spécifique. 
+* Un `reset` est une opération qui prend un commit spécifique et réinitialise les zones de travail de sorte qu'elles correspondent à l'état du dépôt au niveau du commit spécifique. Un reset peut être appelé dans trois modes différents.
+* Un `revert` est une opération qui prend un commit spécifique et crée un nouveau commit qui inverse le commit spécifique. 
+
+
+
+:::
+
+
