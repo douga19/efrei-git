@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Cours 2 - L’historique des commits – Versionning et Repository (xin206 - xdev206)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-36f215d6689654f6cc702cf3f4f6bb39.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./assets/images/logo.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Versionning et Repository (xin206 - xdev206)</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-cours" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Cours</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-cours">    
+        <li>
+    <a class="dropdown-item" href="./cours1.html">
+ <span class="dropdown-text">Cours 1 - Introduction au versionnage</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./cours2.html">
+ <span class="dropdown-text">Cours 2 - L’historique des commits</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./cours3.html">
+ <span class="dropdown-text">Cours 3 - Branches et Fusion</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./cours4.html">
+ <span class="dropdown-text">Cours 4 - Travailler avec un dépôt distant</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tps" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">TPs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-tps">    
+        <li>
+    <a class="dropdown-item" href="./tp1.html">
+ <span class="dropdown-text">TP1 - Premiers pas avec Git</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./tp2.html">
+ <span class="dropdown-text">TP2 - Explorer l’historique des commits, annuler des modifications</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./tp3.html">
+ <span class="dropdown-text">TP3 - Branches et Fusion</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./tp4.html">
+ <span class="dropdown-text">TP4 - Programming quotes (collaborer sur GitHub)</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contenu</h2>
+   
+  <ul>
+  <li><a href="#éléments-de-lhistorique-des-commits" id="toc-éléments-de-lhistorique-des-commits" class="nav-link active" data-scroll-target="#éléments-de-lhistorique-des-commits"><span class="header-section-number">1</span> Éléments de l’historique des commits</a>
+  <ul class="collapse">
+  <li><a href="#commit" id="toc-commit" class="nav-link" data-scroll-target="#commit"><span class="header-section-number">1.1</span> Commit</a></li>
+  <li><a href="#branche" id="toc-branche" class="nav-link" data-scroll-target="#branche"><span class="header-section-number">1.2</span> Branche</a></li>
+  <li><a href="#head" id="toc-head" class="nav-link" data-scroll-target="#head"><span class="header-section-number">1.3</span> <code>HEAD</code></a></li>
+  <li><a href="#références-à-un-commit" id="toc-références-à-un-commit" class="nav-link" data-scroll-target="#références-à-un-commit"><span class="header-section-number">1.4</span> Références à un commit</a></li>
+  </ul></li>
+  <li><a href="#explorer-et-modifier-lhistorique-des-commits" id="toc-explorer-et-modifier-lhistorique-des-commits" class="nav-link" data-scroll-target="#explorer-et-modifier-lhistorique-des-commits"><span class="header-section-number">2</span> Explorer et modifier l’historique des commits</a>
+  <ul class="collapse">
+  <li><a href="#git-checkout" id="toc-git-checkout" class="nav-link" data-scroll-target="#git-checkout"><span class="header-section-number">2.1</span> 1. <code>git checkout</code></a></li>
+  <li><a href="#git-reset" id="toc-git-reset" class="nav-link" data-scroll-target="#git-reset"><span class="header-section-number">2.2</span> 2. <code>git reset</code></a></li>
+  <li><a href="#git-revert" id="toc-git-revert" class="nav-link" data-scroll-target="#git-revert"><span class="header-section-number">2.3</span> 3. <code>git revert</code></a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Cours 2 - L’historique des commits</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>À partir de maintenant, et pour tout le reste du cours, nous allons travailler avec Git. Nous allons aborder dans ce chapitre l’historique des commits de la manière dont Git le voit. Dans ce cours nous allons voir comment explorer l’historique des commits, comment modifier l’historique des commits, comment annuler des modifications, etc.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>L’<em>historique des commits</em>, ou <em>graphe des commits</em> est l’historique de notre projet Git. C’est le résultat que nous donne la commande <code>git log</code>.</p>
+<p><img src="assets/commit-tree.png" alt="Concepts de base du versionnage" height="400px"></p>
+</div>
+</div>
+<section id="éléments-de-lhistorique-des-commits" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="éléments-de-lhistorique-des-commits"><span class="header-section-number">1</span> Éléments de l’historique des commits</h2>
+<section id="commit" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="commit"><span class="header-section-number">1.1</span> Commit</h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Définition
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Dans le contexte du versionnage, un <em>commit</em> est tout simplement une <em>version</em> de notre projet. C’est une sauvegarde de l’état de notre projet à un moment donné. Vous pouvez voir un commit comme une <em>photo</em> (snapshot) de votre projet à un instant T (à l’instant où le commit a été créé).</p>
+</div>
+</div>
+<p>Dans Git, un commit est une structure de données qui contient plusieurs informations dont:</p>
+<ul>
+<li>des métadonnées (identifiant ou <strong>hash</strong>, auteur, date, message, )</li>
+<li>une référence vers un ou plusieurs commits parents</li>
+<li>une copie de l’arborescence du projet au moment du commit</li>
+</ul>
+<p>La commande <code>git commit</code> permet donc de créer un nouveau commit et de l’apposer au bon endroit sur le graphe des commits.</p>
+<p>Analysons donc le résultat d’un <code>git log</code> dans un dépôt après un premier commit. Nous allons afficher le numéro de ligne pour pouvoir se repérer plus facilement.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Exemple de résultat de git log</strong></pre>
+</div>
+<div class="sourceCode" id="cb1" data-filename="Exemple de résultat de git log"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">$</span> git log</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="ex">commit</span> 5be88b053a645728062548258ecbf531aadbcb95 <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> main<span class="kw">)</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="ex">Author:</span> Linus Torvalds <span class="op">&lt;</span>torvalds@mail.com<span class="op">&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="ex">Date:</span>   Wed Jan 10 10:50:22 2024 +0100</span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a>    <span class="ex">Initial</span> commit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Voyons ces informations à la loupe:</p>
+<ul>
+<li>À la ligne 2, on retrouve une longue chaîne de caractères : <code>5be88b053a645728062548258ecbf531aadbcb95</code> qui indique le <em>hash</em> ou l’identifiant du commit (c’est un <em>identifiant unique</em> du commit). Git le génère en utilisant l’algorithme SHA-1.</li>
+<li>Puis juste après <code>(HEAD -&gt; main)</code>. Nous allons voir plus tard ce que cela signifie.</li>
+<li>À la ligne 3 nous avons les informations sur l’auteur du commit <code>Author: Linus Torvalds &lt;torvalds@mail.com&gt;</code>.</li>
+<li>Puis à la ligne 4, <code>Date:   Wed Jan 10 10:50:22 2024 +0100</code>, on nous indique la date à laquelle le commit a été créé, c’est-à-dire que ce commit sauvegarde l’état de notre dépôt à ce moment précis.</li>
+<li>Enfin à la ligne 6, la chaîne de caractères <code>Initial commit</code> indique le message associé à ce commit. Généralement il faut bien décrire les changements apportés dans ce commit pour pouvoir facilement se repérer dans l’historique.</li>
+</ul>
+</section>
+<section id="branche" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="branche"><span class="header-section-number">1.2</span> Branche</h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Définition
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Une <em>branche</em> est une ligne de développement indépendante. C’est une suite de commits qui se suivent et qui ont un point commun : ils ont tous été créés à partir du même commit. C’est-à-dire que tous les commits d’une branche ont un ancêtre commun.</p>
+</div>
+</div>
+<p>On ne peut pas parler de l’historique des commits sans parler de branches. Nous avons vu que l’historique des commits est un graphe dont les sommets sont des commits. Quand on créé une nouvelle branche, nous créons un point de divergence au niveau dernier commit. C’est-à-dire que les commits suivants vont prendre des chemins différents selon la branche dans laquelle ils appartiennent.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Dans Git, une branche est une <strong>pointeur</strong> vers un commit. Ou si vous préférez, une branche est une <strong>étiquette</strong> qui référence un commit.</p>
+</div>
+</div>
+<p>Nous allons parler en détail des branches dans le prochain chapitre. Pour l’instant, nous allons juste voir comment Git représente les branches dans l’historique des commits.</p>
+<p>Nous sommes alors en mesure de comprendre la ligne</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">commit</span> 5be88b053a645728062548258ecbf531aadbcb95 <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> main<span class="kw">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>du <code>git log</code> précédent: <code>main</code> référence le commit dont le hash est <code>5be88b053a645728062548258ecbf531aadbcb95</code>. C’est-à-dire que <code>main</code> est une branche qui pointe sur le commit <code>5be88b053a645728062548258ecbf531aadbcb95</code>.</p>
+</section>
+<section id="head" class="level3" data-number="1.3">
+<h3 data-number="1.3" class="anchored" data-anchor-id="head"><span class="header-section-number">1.3</span> <code>HEAD</code></h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>HEAD</code> est une référence spéciale qui référence le commit qui sera le parent du prochain commit. Généralement elle pointe sur la branche courante dans laquelle on se trouve (car on peut la déplacer).</p>
+</div>
+</div>
+<p>Donc, en reprenant le résultat de notre <code>git log</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Exemple de résultat de git log</strong></pre>
+</div>
+<div class="sourceCode" id="cb3" data-filename="Exemple de résultat de git log"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">$</span> git log</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="ex">commit</span> 5be88b053a645728062548258ecbf531aadbcb95 <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> main<span class="kw">)</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="ex">Author:</span> Linus Torvalds <span class="op">&lt;</span>torvalds@mail.com<span class="op">&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="ex">Date:</span>   Wed Jan 10 10:50:22 2024 +0100</span>
+<span id="cb3-5"><a href="#cb3-5"></a></span>
+<span id="cb3-6"><a href="#cb3-6"></a>    <span class="ex">Initial</span> commit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>On sait que le prochain commit aura comme parent le commit dont le message est <code>"Initial commit"</code>. Supposons maintenant que nous apportons des modifications à notre dépôt et que nous procédons ensuite à un commit. Le résultat du <code>git log</code> va alors ressembler à quelque chose comme ceci.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Exemple de résultat de git log après un deuxième commit</strong></pre>
+</div>
+<div class="sourceCode" id="cb4" data-filename="Exemple de résultat de git log après un deuxième commit"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">commit</span> fe89c631555f9c8168ed0ded9956f68a536d2c82 <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> main<span class="kw">)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Author:</span> Linus Torvalds <span class="op">&lt;</span>torvalds@mail.com<span class="op">&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Date:</span>   Wed Jan 10 10:55:13 2024 +0100</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Set</span> up ci.yml</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">commit</span> 5be88b053a645728062548258ecbf531aadbcb95</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Author:</span> Linus Torvalds <span class="op">&lt;</span>torvalds@mail.com<span class="op">&gt;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Date:</span>   Wed Jan 10 10:50:22 2024 +0100</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Initial</span> commit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>HEAD</code> et <code>main</code> référencent désormais le dernier commit. Nous en verrons d’avantage lors du cours sur les branches.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Référence relative à <code>HEAD</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>On peut utiliser la référence relative à <code>HEAD</code> pour désigner un commit. Pour rappel, <code>HEAD</code> est une référence qui pointe sur le commit qui sera le parent du prochain commit.</p>
+<p>Par exemple, pour désigner le commit précédent, on peut utiliser <code>HEAD^</code>. Pour le précédent commit du précédent commit, on peut utiliser <code>HEAD^^</code> et ainsi de suite. On peut également utiliser <code>HEAD~n</code> pour désigner le n-ième commit précédent.</p>
+</div>
+</div>
+</section>
+<section id="références-à-un-commit" class="level3" data-number="1.4">
+<h3 data-number="1.4" class="anchored" data-anchor-id="références-à-un-commit"><span class="header-section-number">1.4</span> Références à un commit</h3>
+<p>Pour désigner un commit, on peut utiliser son hash. Toutefois il n’est pas pratique de retenir les hash des commits.</p>
+<ul>
+<li>Git nous permet dans un premier temps de n’utiliser que les premiers caractères du hash pour désigner un commit. Par exemple, pour désigner le commit <code>5be88b053a645728062548258ecbf531aadbcb95</code>, on peut utiliser <code>5be88b0</code>. Git va alors chercher le commit qui commence par <code>5be88b0</code> et qui est le plus récent.</li>
+<li>On peut également utiliser les références relatives à <code>HEAD</code> comme nous l’avons vu précédemment.</li>
+<li>Il existe également les <code>tag</code> qui sont des références qui pointent sur un commit spécifique. Nous en parlerons plus tard dans le TP associé à ce cours.</li>
+</ul>
+</section>
+</section>
+<section id="explorer-et-modifier-lhistorique-des-commits" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="explorer-et-modifier-lhistorique-des-commits"><span class="header-section-number">2</span> Explorer et modifier l’historique des commits</h2>
+<p>Git offre plusieurs manières pour explorer et modifier l’historique des commits. De manière générale, nous voulons nous déplacer dans l’historique des commits pour soit revenir à un état antérieur de notre projet soit pour annuler des modifications.</p>
+<p>Les principales commandes à notre disposition sont les commandes <code>git reset</code>, <code>git checkout</code> et <code>git revert</code>. Toutes vous permettent d’annuler certains types de changement dans votre dépôt. De plus, on peut utiliser les deux premières pour gérer des commits ou des fichiers individuels.</p>
+<p>Comme elles sont très similaires, veillez à ne pas les confondre : <strong>à chaque scénario sa commande !</strong>. Nous allons comparer les scénarios d’utilisation les plus courantes de <code>git reset</code>, <code>git checkout</code> et <code>git revert</code>.</p>
+<p>Voyons donc en détail l’effet qu’on chacune de ces commandes. Nous allons prendre le graphe des commits suivant comme exemple:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">C0</span> <span class="op">&lt;</span>- C1 <span class="op">&lt;</span>- C2 <span class="op">&lt;</span>- main <span class="op">&lt;</span>- HEAD</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ici <code>C0</code>, <code>C1</code> et <code>C2</code> dénotent les hash des commits.</p>
+</div>
+</div>
+<section id="git-checkout" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="git-checkout"><span class="header-section-number">2.1</span> 1. <code>git checkout</code></h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Commande
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>git checkout</code> permet de déplacer <code>HEAD</code> vers un commit spécifique. C’est-à-dire que <code>HEAD</code> va pointer sur le commit spécifié.</p>
+</div>
+</div>
+<p><code>git checkout</code> permet de déplacer <code>HEAD</code> vers un commit spécifique. Elle peut prendre en paramètre un le hash d’un commit, une branche ou un tag. Elle peut également être utilisée dans un périmètre de fichier, c’est-à-dire qu’on peut l’appliquer au niveau d’un certains nombre de fichiers pour que les versions de ces fichiers correspondent à celles d’un commit spécifique. Par exemple,</p>
+<ul>
+<li>La commande <code>git checkout C0</code> a pour effet:</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">HEAD</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a> <span class="kw">|</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a> <span class="ex">v</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">C0</span> <span class="op">&lt;</span>- C1 <span class="op">&lt;</span>- C2 <span class="op">&lt;</span>- main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Tandis que la commande:</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout C1 toto.py readme.md</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>va restaurer les fichiers <code>toto.py</code> et <code>readme.md</code> de la branche <code>main</code> à leur version au moment du commit <code>C1</code>.</p>
+</section>
+<section id="git-reset" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="git-reset"><span class="header-section-number">2.2</span> 2. <code>git reset</code></h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Commande
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>git reset</code> permet de déplacer la branche courante (<code>HEAD</code>) et les pointeurs de branche vers un commit spécifique. Elle est généralement utilisée pour annuler ou réorganiser les commits dans l’historique.</p>
+</div>
+</div>
+<p>Il existe trois formes principales de <code>git reset</code> et qui s’utilisent avec les options suivantes:</p>
+<ul>
+<li><code>git reset --soft &lt;référence à un commit&gt;</code> :
+<ul>
+<li>déplace HEAD et la branche courante au commit spécifié</li>
+<li>conserve les modifications dans la zone d’index</li>
+<li>préserve les modifications dans le répertoire de travail.</li>
+<li>utile lorsqu’on veut modifier son dernier commit</li>
+</ul></li>
+<li><code>git reset --mixed &lt;référence à un commit&gt;</code> : (<em>par défaut</em>)
+<ul>
+<li>déplace HEAD et la branche courante au commit spécifié</li>
+<li>réinitialise la zone d’index</li>
+<li>préserve les modifications dans le répertoire de travail.</li>
+<li>utile lorsqu’on veut combiner plusieurs commits, ou réorganiser les changements avant de committer à nouveau</li>
+</ul></li>
+<li><code>git reset --hard &lt;référence à un commit&gt;</code> : Annule les commits en réinitialisant à la fois la zone d’index et le répertoire de travail à l’état du commit spécifié. Toutes les modifications non validées sont perdues.</li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Attention
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Sans spécifier d’option, <code>git reset</code> utilise l’option <code>--mixed</code> par défaut.</li>
+<li>Il est important de noter que <code>git reset</code> modifie l’historique des commits, il est donc recommandé de ne pas l’utiliser sur des commits déjà partagés avec d’autres utilisateurs (<strong>À ne pas faire sur une branche distante</strong>).</li>
+<li><code>git reset --hard</code> <strong>peut vous faire perdre vos modifications</strong></li>
+</ul>
+</div>
+</div>
+<p>Sur notre graphe exemple, <code>git reset C1</code> aura pour effet:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">C0</span> <span class="op">&lt;</span>- C1 <span class="op">&lt;</span>- main <span class="op">&lt;</span>- HEAD</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="git-revert" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="git-revert"><span class="header-section-number">2.3</span> 3. <code>git revert</code></h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Commande
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>git revert</code> permet d’annuler un commit spécifique en créant un nouveau commit qui annule les modifications apportées par le commit précédent. Contrairement à <code>git reset</code>, <code>git revert</code> ne modifie pas l’historique des commits existants, mais ajoute plutôt un nouveau commit qui annule les modifications spécifiées.</p>
+</div>
+</div>
+<p>Lorsque vous exécutez <code>git revert &lt;référence à un commit&gt;</code>, Git crée un nouveau commit contenant l’inverse des modifications apportées par le commit spécifié. Cela signifie que les modifications initiales restent dans l’historique, mais elles sont neutralisées par le nouveau commit de réversion.</p>
+<p>L’avantage de <code>git revert</code> est qu’il est sûr à utiliser sur des commits déjà partagés, car il n’altère pas l’historique existant. Cependant, il peut entraîner un historique de commits plus complexe avec des commits de réversion supplémentaires.</p>
+<p>Par exemple, <code>git revert C2</code> créera donc un commit <code>C3</code> qui va neutraliser les modifications apportées par <code>C2</code>. Cette commande aura donc comme effet:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">C0</span> <span class="op">&lt;</span>- C1 <span class="op">&lt;</span>- C2 <span class="op">&lt;</span>- C3 <span class="op">&lt;</span>- main <span class="op">&lt;</span>- HEAD</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">*</span>           </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>            <span class="kw">(</span><span class="ex">C3</span> annule C2<span class="kw">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+En somme
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Un <code>checkout</code> est une opération qui permet de déplacer<code>HEAD</code> vers un commit spécifique.</li>
+<li>Un <code>reset</code> est une opération qui prend un commit spécifique et réinitialise les zones de travail de sorte qu’elles correspondent à l’état du dépôt au niveau du commit spécifique. Un reset peut être appelé dans trois modes différents.</li>
+<li>Un <code>revert</code> est une opération qui prend un commit spécifique et crée un nouveau commit qui inverse le commit spécifique.</li>
+</ul>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

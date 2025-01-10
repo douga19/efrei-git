@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Cours 3 - Branches et Fusion – Versionning et Repository (xin206 - xdev206)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-36f215d6689654f6cc702cf3f4f6bb39.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./assets/images/logo.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Versionning et Repository (xin206 - xdev206)</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-cours" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Cours</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-cours">    
+        <li>
+    <a class="dropdown-item" href="./cours1.html">
+ <span class="dropdown-text">Cours 1 - Introduction au versionnage</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./cours2.html">
+ <span class="dropdown-text">Cours 2 - L’historique des commits</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./cours3.html">
+ <span class="dropdown-text">Cours 3 - Branches et Fusion</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./cours4.html">
+ <span class="dropdown-text">Cours 4 - Travailler avec un dépôt distant</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tps" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">TPs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-tps">    
+        <li>
+    <a class="dropdown-item" href="./tp1.html">
+ <span class="dropdown-text">TP1 - Premiers pas avec Git</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./tp2.html">
+ <span class="dropdown-text">TP2 - Explorer l’historique des commits, annuler des modifications</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./tp3.html">
+ <span class="dropdown-text">TP3 - Branches et Fusion</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./tp4.html">
+ <span class="dropdown-text">TP4 - Programming quotes (collaborer sur GitHub)</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contenu</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#la-commande-git-branch" id="toc-la-commande-git-branch" class="nav-link" data-scroll-target="#la-commande-git-branch"><span class="header-section-number">2</span> La commande <code>git branch</code></a>
+  <ul class="collapse">
+  <li><a href="#exemple" id="toc-exemple" class="nav-link" data-scroll-target="#exemple"><span class="header-section-number">2.1</span> Exemple</a></li>
+  </ul></li>
+  <li><a href="#le-retour-de-la-commande-git-checkout" id="toc-le-retour-de-la-commande-git-checkout" class="nav-link" data-scroll-target="#le-retour-de-la-commande-git-checkout"><span class="header-section-number">3</span> Le retour de la commande <code>git checkout</code></a>
+  <ul class="collapse">
+  <li><a href="#exemple-1" id="toc-exemple-1" class="nav-link" data-scroll-target="#exemple-1"><span class="header-section-number">3.1</span> Exemple</a></li>
+  </ul></li>
+  <li><a href="#fusionner-des-branches" id="toc-fusionner-des-branches" class="nav-link" data-scroll-target="#fusionner-des-branches"><span class="header-section-number">4</span> Fusionner des branches</a>
+  <ul class="collapse">
+  <li><a href="#exemple-2" id="toc-exemple-2" class="nav-link" data-scroll-target="#exemple-2"><span class="header-section-number">4.1</span> Exemple</a></li>
+  </ul></li>
+  <li><a href="#réorganiser-lhistorique-avec-git-rebase" id="toc-réorganiser-lhistorique-avec-git-rebase" class="nav-link" data-scroll-target="#réorganiser-lhistorique-avec-git-rebase"><span class="header-section-number">5</span> Réorganiser l’historique avec <code>git rebase</code></a></li>
+  <li><a href="#conflits-de-fusion" id="toc-conflits-de-fusion" class="nav-link" data-scroll-target="#conflits-de-fusion"><span class="header-section-number">6</span> Conflits de fusion</a>
+  <ul class="collapse">
+  <li><a href="#scenario-type-de-conflit-de-fusion" id="toc-scenario-type-de-conflit-de-fusion" class="nav-link" data-scroll-target="#scenario-type-de-conflit-de-fusion"><span class="header-section-number">6.1</span> Scenario type de conflit de fusion</a></li>
+  <li><a href="#résolution-des-conflits" id="toc-résolution-des-conflits" class="nav-link" data-scroll-target="#résolution-des-conflits"><span class="header-section-number">6.2</span> Résolution des conflits</a></li>
+  </ul></li>
+  <li><a href="#pour-aller-plus-loin" id="toc-pour-aller-plus-loin" class="nav-link" data-scroll-target="#pour-aller-plus-loin"><span class="header-section-number">7</span> Pour aller plus loin</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Cours 3 - Branches et Fusion</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>Dans le dernier cours, nous avons eu un bref aperçu de la notion de branche. Nous avons vu que les branches étaient tout simplement des pointeurs sur des commits et permettaient de travailler sur des versions différentes d’un même projet. Nous allons aborder dans ce cours la manière dont on peut créer et gérer des branches, ainsi que la manière dont on peut fusionner des branches entre elles.</p>
+</section>
+<section id="la-commande-git-branch" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="la-commande-git-branch"><span class="header-section-number">2</span> La commande <code>git branch</code></h2>
+<p>Une fois que vous initialisez un dépôt git, vous avez une branche par défaut qui est créée. Cette branche s’appelle <code>main</code>. Cette branche est la branche principale par défaut de votre projet. La commande <code>git branch</code> permet de lister les branches présentes dans votre dépôt. Vous pouvez l’utiliser de la manière suivante :</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git branch</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>L’astérisque devant le nom <code>main</code> indique que c’est la branche sur laquelle vous êtes actuellement. Ici nous n’avons qu’une seule branche, mais il est possible d’en avoir plusieurs. Nous allons voir comment en créer une nouvelle.</p>
+<p>Dans un dépôt Git avec une unique branche, l’historique des commits est une succession linéaire de commits. La création de branche permet de créer, comme son nom l’indique, une branche dans l’arbre des commits et ainsi de créer une nouvelle ligne de développement indépendante de la branche principale.</p>
+<p>Travailler avec les branches présente plusieurs avantages:</p>
+<ul>
+<li>Vous pouvez travailler sur une nouvelle fonctionnalité sans impacter le code de la branche principale.</li>
+<li>Corriger un bug dans le projet sans impacter le code de la branche principale.</li>
+<li>Travailler de manière collaborative sur un projet sans impacter le code de la branche principale.</li>
+</ul>
+<p>Vous l’aurez compris, les branches sont un élément essentiel de Git car elles permettent de faire évoluer un projet de manière indépendante et <strong>sans impacter le code de la branche principale</strong>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Commandes essentielles
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><code>git branch &lt;nom_branche&gt;</code> permet de créer une nouvelle branche dans votre dépôt, dont le nom est <code>nom_branche</code>.</li>
+<li><code>git branch -d &lt;nom_branche&gt;</code> permet de supprimer une branche de votre dépôt, dont le nom est <code>nom_branche</code>.</li>
+<li><code>git switch &lt;nom_branche&gt;</code> permet de changer de branche. Vous vous retrouverez sur la branche <code>nom_branche</code>.</li>
+</ul>
+</div>
+</div>
+<section id="exemple" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="exemple"><span class="header-section-number">2.1</span> Exemple</h3>
+<p>Prenons un petit dépôt Git pour illustrer tout ça. Nous avons un dépôt Git avec deux commits dans la branche <code>main</code>. Nous allons créer une nouvelle branche <code>dev</code> et nous placer dessus. Puis nous allons créer un nouveau commit dans cette branche. Voici le résultat de ces opérations:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Historique initial</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git log <span class="at">--all</span> <span class="at">--decorate</span> <span class="at">--oneline</span> <span class="at">--graph</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> fdf4E5b <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> main<span class="kw">)</span> <span class="ex">Commit</span> 1</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 5f6b7d5 Commit 0</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Création de la branche dev</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git branch dev</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Historique après la création de la branche dev</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git log <span class="at">--all</span> <span class="at">--decorate</span> <span class="at">--oneline</span> <span class="at">--graph</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> fdf4E5b <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> main, dev<span class="kw">)</span> <span class="ex">Commit</span> 1</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 5f6b7d5 Commit 0</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># On se place sur la branche dev </span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git switch dev</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ex">Basculement</span> sur la nouvelle branche <span class="st">'dev'</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Historique après le checkout</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git log <span class="at">--all</span> <span class="at">--decorate</span> <span class="at">--oneline</span> <span class="at">--graph</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> fdf4E5b <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> dev, main<span class="kw">)</span> <span class="ex">Commit</span> 1</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 5f6b7d5 Commit 0</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co"># On crée un nouveau commit dans la branche dev, après avoir fait des modifications</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git commit <span class="at">-am</span> <span class="st">"Commit 2"</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Historique après le commit</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git log <span class="at">--all</span> <span class="at">--decorate</span> <span class="at">--oneline</span> <span class="at">--graph</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 42efefD <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> dev<span class="kw">)</span> <span class="ex">Commit</span> 2</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> fdf4E5b <span class="er">(</span><span class="ex">main</span><span class="kw">)</span> <span class="ex">Commit</span> 1</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 5f6b7d5 Commit 0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>On observe alors que:</p>
+<ul>
+<li>Lors de la création d’une branche, celle-ci est créée à partir du commit où se situe <code>HEAD</code> (ici le commit <code>Commit 1</code>).</li>
+<li>Lorsque l’on se déplace sur une branche, <code>HEAD</code> se déplace sur le dernier commit de la branche (ici le commit <code>Commit 1</code>). <code>HEAD</code> va alors pointer sur la branche <code>dev</code>.</li>
+<li>Lorsque l’on crée un nouveau commit dans la branche <code>dev</code>, celui-ci est créé à partir du commit où se situe <code>HEAD</code> (ici le commit <code>Commit 1</code>) de la branche <code>dev</code> et déplace <code>HEAD</code> et <code>dev</code> sur le commit nouvellement créé (ici le commit <code>Commit 2</code>). Le dernier commit de <code>main</code> reste le commit <code>Commit 1</code>.</li>
+</ul>
+</section>
+</section>
+<section id="le-retour-de-la-commande-git-checkout" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="le-retour-de-la-commande-git-checkout"><span class="header-section-number">3</span> Le retour de la commande <code>git checkout</code></h2>
+<p>Précédemment, nous avons vu que la commande <code>git checkout</code> déplacer <code>HEAD</code> sur un commit spécifique. Mais comme une branche est un pointeur sur un commit, c’est-à-dire qu’une branche référence un commit (son dernier commit en particulier), la commande <code>git checkout &lt;nom_branche&gt;</code> permet également de déplacer <code>HEAD</code> sur le dernier commit de la branche <code>nom_branche</code>.</p>
+<p>La commande <code>git checkout</code> permet également de créer une nouvelle branche et de se placer directement dessus. C’est pratique dans les cas où vous voulez revenir dans un commit antérieur de votre projet et créer une nouvelle branche à partir de ce commit. Pour cela, on utilise l’option <code>-b</code> de la commande <code>git checkout</code>:</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Commande
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>git checkout &lt;reference_commit&gt; -b &lt;nom_branche&gt;</code> permet de créer une nouvelle branche <code>nom_branche</code> à partir du commit référencé par <code>reference_commit</code> et de se placer dessus.</p>
+</div>
+</div>
+<section id="exemple-1" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="exemple-1"><span class="header-section-number">3.1</span> Exemple</h3>
+<p>Reprenons notre dépôt Git précédent. Nous avons deux commits dans la branche <code>main</code> et un commit dans la branche <code>dev</code>. Nous allons nous placer sur le commit <code>Commit 0</code> et créer une nouvelle branche <code>feature</code> à partir de ce commit. Voici le résultat de ces opérations:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Historique initial</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git log <span class="at">--all</span> <span class="at">--decorate</span> <span class="at">--oneline</span> <span class="at">--graph</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 42efefD <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> dev<span class="kw">)</span> <span class="ex">Commit</span> 2</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> fdf4E5b <span class="er">(</span><span class="ex">main</span><span class="kw">)</span> <span class="ex">Commit</span> 1</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 5f6b7d5 Commit 0</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># On se place sur le commit 0 et on crée une nouvelle branche feature</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git checkout 5f6b7d5 <span class="at">-b</span> feature</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Basculement</span> sur la nouvelle branche <span class="st">'feature'</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Historique après le checkout</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git log <span class="at">--all</span> <span class="at">--decorate</span> <span class="at">--oneline</span> <span class="at">--graph</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 42efefD <span class="er">(</span><span class="ex">dev</span><span class="kw">)</span> <span class="ex">Commit</span> 2</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> fdf4E5b <span class="er">(</span><span class="ex">main</span><span class="kw">)</span> <span class="ex">Commit</span> 1</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 5f6b7d5 <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> feature<span class="kw">)</span> <span class="ex">Commit</span> 0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Puisque <code>git checkout</code> a besoin d’une référence à un commit pour pouvoir déplacer <code>HEAD</code>, les références suivantes auraient également fonctionné:</p>
+<ul>
+<li><code>git checkout 5f6b7d5 -b feature</code></li>
+<li><code>git checkout main^ -b feature</code></li>
+<li><code>git checkout main~1 -b feature</code></li>
+<li><code>git checkout dev^^ -b feature</code></li>
+<li><code>git checkout dev~2 -b feature</code></li>
+<li><code>git checkout HEAD^^ -b feature</code></li>
+<li><code>git checkout HEAD~2 -b feature</code></li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="fusionner-des-branches" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="fusionner-des-branches"><span class="header-section-number">4</span> Fusionner des branches</h2>
+<p>Fusionner deux branches permet de combiner les modifications apportées dans une branche avec une autre branche. La fusion de deux branches se fait toujours dans le sens d’une branche vers une autre branche. On appelera la branche qui reçoit les modifications <strong>branche de destination</strong> et la branche qui fournit les modifications <strong>branche source</strong>.</p>
+<p>Concrètement, l’opération de fusion consiste créer un nouveau commit, appelé <strong>commit de fusion</strong> dans la branche de destination. Ce commit aura comme parent le dernier commit de la branche destination et de la branche source. Faire une fusion permet donc de <em>fusionner</em> deux historiques de commits en un seul.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Commande
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>git merge &lt;nom_branche&gt;</code> permet de fusionner la branche <code>nom_branche</code> dans la branche courante.</p>
+</div>
+</div>
+<section id="exemple-2" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="exemple-2"><span class="header-section-number">4.1</span> Exemple</h3>
+<p>Prenons notre dépôt exemple tel qu’il était avant de créer la branche <code>feature</code>. Nous avons deux commits dans la branche <code>main</code> et un commit supplémentaire dans la branche <code>dev</code>. Dans un premier temps, nous allons créer un commit dans <code>main</code>, ensuite allons fusionner la branche <code>dev</code> dans la branche <code>main</code>. Dans notre exemple <code>dev</code> sera la branch source et <code>main</code> la branche de destination. Voici le résultat de ces opérations:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Historique initial</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git log <span class="at">--all</span> <span class="at">--decorate</span> <span class="at">--oneline</span> <span class="at">--graph</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 42efefD <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> dev<span class="kw">)</span> <span class="ex">Commit</span> 2</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> fdf4E5b <span class="er">(</span><span class="ex">main</span><span class="kw">)</span> <span class="ex">Commit</span> 1</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 5f6b7d5 Commit 0</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># On se place d'abord sur main</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git switch main</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Basculement</span> sur la branche <span class="st">'main'</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># On crée un nouveau commit dans main</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git commit <span class="at">-am</span> <span class="st">"Commit 3"</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Historique après le commit</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git log <span class="at">--all</span> <span class="at">--decorate</span> <span class="at">--oneline</span> <span class="at">--graph</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 42efefD <span class="er">(</span><span class="ex">dev</span><span class="kw">)</span> <span class="ex">Commit</span> 2</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span> <span class="ex">*</span> 8ba1953 <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> main<span class="kw">)</span> <span class="ex">Commit</span> 3</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span><span class="ex">/</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> fdf4E5b Commit 1</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 5f6b7d5 Commit 0</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co"># On fusionne la branche dev dans la branche main</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git merge dev <span class="at">-m</span> <span class="st">"Commit 4(fusion)"</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Historique après la fusion</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git log <span class="at">--all</span> <span class="at">--decorate</span> <span class="at">--oneline</span> <span class="at">--graph</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span>   efde87b <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> main<span class="kw">)</span> <span class="ex">Commit</span> 4<span class="er">(</span><span class="ex">fusion</span><span class="kw">)</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span><span class="dt">\</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span> <span class="ex">*</span> 42efefD <span class="er">(</span><span class="ex">dev</span><span class="kw">)</span> <span class="ex">Commit</span> 2</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> <span class="kw">|</span> <span class="ex">8ba1953</span> Commit 3</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span><span class="ex">/</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> fdf4E5b Commit 1</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 5f6b7d5 Commit 0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Dans la pratique, une fois satisfait du travail effectué dans une branche, on la supprime. Cela permet de garder un historique propre et de ne pas avoir trop de branches dans le dépôt. Pour supprimer une branche, on utilise la commande <code>git branch -d &lt;nom_branche&gt;</code>.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="réorganiser-lhistorique-avec-git-rebase" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="réorganiser-lhistorique-avec-git-rebase"><span class="header-section-number">5</span> Réorganiser l’historique avec <code>git rebase</code></h2>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Commande
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Git rebase est une commande qui permet de déplacer ou combiner une séquence de commits vers une nouvelle base (commit). Elle réécrit l’historique du projet en créant de nouveaux commits pour chaque commit de la branche originale.</p>
+<p>Elle permet d’avoir un historique <em>linéaire</em>.</p>
+</div>
+</div>
+<ol type="1">
+<li>Comment ça fonctionne réellement :</li>
+</ol>
+<ul>
+<li><code>git rebase</code> prend les commits d’une branche et les rejoue sur une autre branche</li>
+<li>Il crée de nouveaux commits avec de nouveaux hashes, même si le contenu est identique</li>
+<li>Il modifie l’historique du dépôt en créant une nouvelle ligne de commits</li>
+</ul>
+<ol start="2" type="1">
+<li>Différence principale avec merge :</li>
+</ol>
+<ul>
+<li><code>merge</code> crée un nouveau commit qui combine les changements des deux branches.</li>
+<li><code>rebase</code> réécrit l’historique en déplaçant la base de votre branche Le résultat final en termes de contenu est le même, mais l’historique est différent.</li>
+</ul>
+<ol start="3" type="1">
+<li>Quand utiliser chaque commande :</li>
+</ol>
+<ul>
+<li><code>merge</code> : pour intégrer des changements tout en préservant l’historique exact</li>
+<li><code>rebase</code> : pour garder un historique linéaire et plus propre, particulièrement utile pour les branches de fonctionnalités avant de les fusionner dans main</li>
+</ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>N’utilisez jamais rebase sur des commits qui ont déjà été publiés et partagés avec d’autres développeurs, car cela peut créer des problèmes de synchronisation pour l’équipe.</p>
+</div>
+</div>
+<p>Reprenons notre exemple. On suppose que l’état de notre dépôt est le suivant:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Historique actuel</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git log <span class="at">--all</span> <span class="at">--decorate</span> <span class="at">--oneline</span> <span class="at">--graph</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 80f914d <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> feature<span class="kw">)</span> <span class="ex">Commit</span> 6</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> e045507 Commit 5</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span> <span class="ex">*</span> 830e010 <span class="er">(</span><span class="ex">main</span><span class="kw">)</span> <span class="ex">Commit</span> 8</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span> <span class="ex">*</span> 855796a Commit 7</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span><span class="ex">/</span>  </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span>   e1838dc <span class="er">(</span><span class="ex">dev</span><span class="kw">)</span> <span class="ex">Commit</span> 4<span class="er">(</span><span class="ex">fusion</span><span class="kw">)</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span><span class="ex">\ </span> </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span> <span class="ex">*</span> fdf4723 Commit 2</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> <span class="kw">|</span> <span class="ex">8ba1953</span> Commit 3</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span><span class="ex">/</span>  </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> fdf4E5b Commit 1</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 5f6b7d5 Commit 0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>À partir du <code>Commit 4(fusion)</code>, une branche <code>feature</code> a été créé. Les commits <code>Commit 5</code> et <code>Commit 6</code> ont été réalisés dans <code>feature</code> tandis que <code>Commit 7</code> et <code>Commit 8</code> ont été faits dans <code>main</code>. La branche courante est <code>feature</code>.</p>
+<p>Nous voudrions par la suite que <code>main</code> intègre les modifications apportés dans la branche <code>feature</code> avec un <code>rebase</code>. Ici <code>main</code> est donc notre branche de destination et <code>feature</code> notre branche source. On suppose que les commits de <code>feature</code> ne présentent aucun conflits avec ceux de <code>main</code>. Voici comment procéder:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># On se place sur la branche main</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git switch main</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Basculement</span> sur la branche <span class="st">'main'</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># On effectue le rebase </span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git rebase feature</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Historique après le rebase</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git log <span class="at">--all</span> <span class="at">--decorate</span> <span class="at">--oneline</span> <span class="at">--graph</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 4644c80 <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> main<span class="kw">)</span> <span class="ex">Commit</span> 8</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 7d6c207 Commit 7</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 830e010 <span class="er">(</span><span class="ex">feature</span><span class="kw">)</span> <span class="ex">Commit</span> 6</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> e045507 Commit 5</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span>   e1838dc <span class="er">(</span><span class="ex">dev</span><span class="kw">)</span> <span class="ex">Commit</span> 4<span class="er">(</span><span class="ex">fusion</span><span class="kw">)</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span><span class="dt">\</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span> <span class="ex">*</span> fdf4723 Commit 2</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> <span class="kw">|</span> <span class="ex">8ba1953</span> Commit 3</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span><span class="ex">/</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> fdf4E5b Commit 1</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 5f6b7d5 Commit 0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Remarquez que les hash des <code>Commit 7</code> et <code>Commit 8</code> ont changé. En effet, ce sont de nouveaux commits mais avec exactement les mêmes informations avant le <code>rebase</code>. Vous pouvez voir <code>rebase</code> comme un couper/coller.</p>
+<p>Le rebase de <code>main</code> dans <code>feature</code> coupe tous les commits de <code>main</code> qui ne sont pas encore dans <code>feature</code> et les colle après <code>feature</code>. C’est-à-dire que <code>main</code> est déplacé sur le dernier commit de <code>feature</code> et que les commits de <code>main</code> sont recopiés après <code>feature</code>, ainsi tous les commits de <code>feature</code> ont été intégrés dans <code>main</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+En somme
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>git rebase &lt;branche_source&gt;</code> permet de recopier tous les commits de la branche courante sur la branche <code>branche_source</code>.</p>
+<p><code>git rebase &lt;branche_source&gt; &lt;branche_destination&gt;</code> permet de recopier tous les commits de la branche <code>branche_source</code> sur la branche <code>branche_destination</code> et déplace <code>HEAD</code> sur la branche <code>branche_destination</code>.</p>
+</div>
+</div>
+</section>
+<section id="conflits-de-fusion" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="conflits-de-fusion"><span class="header-section-number">6</span> Conflits de fusion</h2>
+<p>Les <strong>conflits de fusion</strong> (ou <strong>merge conflicts</strong> en anglais) surviennent lorsqu’il y a des modifications concurrentes et incompatibles sur un même fichier dans un système de contrôle de version comme Git. Cela se produit généralement lorsque deux branches différentes ont modifié la même partie du code et que Git ne peut pas résoudre automatiquement les différences.</p>
+<p>En d’autres termes, il y a conflit lorsque vous essayez fusionner deux branches alors qu’un fichier contient deux versions différentes sur une ou plusieurs même lignes.</p>
+<p>Lorsque Git détecte un conflit de fusion, il marque le fichier conflictuel et vous devez le résoudre manuellement. Voici un scenario type dans lequel les conflits peuvent apparaître et comment les résoudre.</p>
+<section id="scenario-type-de-conflit-de-fusion" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="scenario-type-de-conflit-de-fusion"><span class="header-section-number">6.1</span> Scenario type de conflit de fusion</h3>
+<ul>
+<li>Vous lancez une fusion par exemple d’une branche <code>dev</code> dans une branche <code>main</code>.</li>
+<li>Si Git détecte des conflits, il vous informera que des conflits de fusion se sont produits et il vous indiquera les fichiers conflictuels. À ce stade, Git va tout simplement suspendre la fusion.</li>
+<li>Vous devez ouvrir chaque fichier conflictuel dans un éditeur de texte. À l’intérieur du fichier, vous verrez des marqueurs de conflit qui ressemblent à ceci :</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ici se trouvent les modifications de la branche `dev` (branche source)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>La partie entre <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> et <code>=======</code> correspond aux modifications de la branche principale, et la partie entre <code>=======</code> et <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; dev</code> correspond aux modifications de la branche que nous essayons de fusionner.</p>
+<p>Prenons alors un exemple pour illustrer tout ça. On suppose que l’on a l’historique suivant:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> e0397cd <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> dev<span class="kw">)</span> <span class="ex">Commit</span> 3</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span> <span class="ex">*</span> a518e66 <span class="er">(</span><span class="ex">main</span><span class="kw">)</span> <span class="ex">Commit</span> 2</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span><span class="ex">/</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 6177b18 Commit 1</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> e0dbacd Commit 0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Dans ce dépôt il n’y a qu’un unique fichier <code>README.md</code> dans lequel on a ajouté pour chaque commit le message du commit. C’est-à-dire qu’au moment du <code>Commit 0</code>, le fichier <code>README.md</code> contenait uniquement la ligne <code>Commit 0</code>. Au moment du <code>Commit 1</code>, le fichier <code>README.md</code> contenait une ligne <code>Commit 0</code> et une ligne <code>Commit 1</code>. Et actuellement, voici le contenu du fichier <code>README.md</code>:</p>
+<p><strong>Dans main:</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Commit 0</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>Commit 1</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>Commit 2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Dans dev:</strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Commit 0</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>Commit 1</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>Commit 3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>On remarque bien qu’à la ligne 3, les deux fichiers contiennent des informations différentes. Essayons donc de fusionner <code>dev</code> dans <code>main</code> et observons le résultat.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git switch main</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Basculement</span> sur la branche <span class="st">'main'</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git merge dev</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Fusion</span> automatique de README.md</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ex">CONFLIT</span> <span class="er">(</span><span class="ex">contenu</span><span class="kw">)</span> <span class="bu">:</span> Conflit de fusion dans README.md</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="ex">La</span> fusion automatique a échoué <span class="kw">;</span> <span class="ex">réglez</span> les conflits et validez le résultat.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Git nous indique que le fichier conflictuel est le fichier <code>README.md</code>. Ouvrons-le et observons son contenu:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Commit 0</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>Commit 1</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>Commit 2</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">=======</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>Commit 3</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="at">&gt;&gt;&gt;&gt;&gt;&gt;&gt; dev</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>La ligne <code>Commit 2</code> est la ligne de la branche <code>main</code> et la ligne <code>Commit 3</code> est la ligne de la branche <code>dev</code>.</p>
+</section>
+<section id="résolution-des-conflits" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="résolution-des-conflits"><span class="header-section-number">6.2</span> Résolution des conflits</h3>
+<p>Vous devez modifier <strong>manuellement</strong> le contenu du fichier pour résoudre les conflits. Vous pouvez choisir de garder uniquement les modifications de la branche principale, uniquement les modifications de la branche à fusionner, ou combiner les deux selon vos besoins. Supprimez également les marqueurs de conflit <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code>, <code>=======</code> et <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; dev</code> une fois que vous avez terminé la résolution.</p>
+<p>Après avoir résolu le conflit, il vous faut enregistrer les modifications et ajouter le fichier résolu à la zone d’index. Vous pouvez ensuite finaliser la fusion en effectuant un commit.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Il est important de noter que les conflits de fusion peuvent être complexes et nécessitent souvent une compréhension approfondie du code et des intentions des modifications. Il est recommandé de prendre le temps d’analyser soigneusement les conflits et de consulter les membres de l’équipe si nécessaire pour prendre des décisions éclairées lors de la résolution des conflits.</p>
+</div>
+</div>
+<p>Reprenons notre exemple. Nous allons résoudre le conflit en gardant les deux lignes. Voici le résultat:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>Commit 0</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>Commit 1</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>Commit 2</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>Commit 3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Nous pouvons alors ajouter le fichier résolu à la zone d’index et finaliser la fusion en effectuant un commit.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Après la résolution du conflit, on ajoute le fichier résolu à la zone d'index</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git add README.md</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># On finalise la fusion en effectuant un commit</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git commit <span class="at">-m</span> <span class="st">"Commit 4(fusion)"</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Historique après la fusion</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git log <span class="at">--all</span> <span class="at">--decorate</span> <span class="at">--oneline</span> <span class="at">--graph</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span>   1f2b6b6 <span class="er">(</span><span class="ex">HEAD</span> <span class="at">-</span><span class="op">&gt;</span> main<span class="kw">)</span> <span class="ex">Commit</span> 4<span class="er">(</span><span class="ex">fusion</span><span class="kw">)</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span><span class="dt">\</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span> <span class="ex">*</span> e0397cd <span class="er">(</span><span class="ex">dev</span><span class="kw">)</span> <span class="ex">Commit</span> 3</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> <span class="kw">|</span> <span class="ex">a518e66</span> Commit 2</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span><span class="ex">/</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> 6177b18 Commit 1</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> e0dbacd Commit 0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="pour-aller-plus-loin" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="pour-aller-plus-loin"><span class="header-section-number">7</span> Pour aller plus loin</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ressources supplémentaires
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><a href="https://git-scm.com/book/fr/v2/Les-branches-avec-Git-Les-branches-en-bref">Documentation officielle de Git sur les branches</a></li>
+<li><a href="https://git-scm.com/book/fr/v2/Les-branches-avec-Git-Branches-et-fusions%C2%A0%3A-les-bases">Documentation officielle de Git sur la fusion</a></li>
+<li><a href="https://git-scm.com/book/fr/v2/Les-branches-avec-Git-Rebaser-Rebasing">Documentation officielle de Git sur le rebase</a></li>
+</ul>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
