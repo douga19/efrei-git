@@ -1,5 +1,5 @@
 ---
-title: Syllabus
+title: Versionning et Repository
 ---
 
 # Objectifs
@@ -12,50 +12,60 @@ title: Syllabus
 
 Ce module se déroulera en 30 heures de cours sous forme de Cours - TP.
 
-# Cours 1: Introduction au versionnage
+## Cours 1: Introduction au versionnage
 * Présentation des concepts de base du versionnage
 * Comprendre l'importance du versionnage dans la gestion des projets de développement logiciel
 * Expliquer les avantages du versionnage, tels que la gestion des modifications, la collaboration et la traçabilité
-
-### Types d'outils de gestion de version
 * Présenter les différents types de systèmes de gestion de dépôt : décentralisés (comme Git) et centralisés (comme SVN)
 * Comparer les avantages et les inconvénients de chaque type
-
-### Configuration de l'environnement de travail (Git)
-* Guider les étudiants pour installer et configurer l'outil de gestion de dépôt choisi (par exemple, Git) sur leur système
-* Expliquer les commandes de base pour configurer l'identité de l'utilisateur et les préférences de l'outil
+* **TP1 : Premiers pas avec Git**
 
 
-# Cours 2 : L'historique des commits
-
-## Commandes de base de gestion de dépôt
-* Enseigner les commandes de base du système de gestion de dépôt, telles que la création d'un nouveau dépôt, l'ajout de fichiers, la création de branches, la fusion des branches, etc.
+## Cours 2 : L'historique des commits
+* Présentation de l'historique des commits
+* Exploration de l'historique: modification, suppression, annulation, etc.
+* Enseigner les commandes de base du système de gestion de dépôt 
 * Présenter les commandes pour suivre l'historique des modifications et effectuer des opérations de base, comme la création de tags et la révision des modifications
+* **TP2 : Navigation dans l'historique des commits**
 
-## Gestion des branches et des fusions
+## Cours 3 : Gestion des branches et des fusions
 * Expliquer l'importance de la gestion des branches dans les projets de développement
 * Enseigner les techniques de création, de modification et de fusion de branches
 * Expliquer les stratégies de fusion et les bonnes pratiques associées
-
-## Collaboration et gestion de conflits
-
-* Présenter les concepts de collaboration dans un environnement de gestion de dépôt
 * Expliquer les problèmes de conflits qui peuvent survenir lors de la fusion de modifications concurrentes
-* Enseigner les techniques pour résoudre les conflits et assurer une collaboration efficace
+* Enseigner les techniques pour résoudre les conflits
+* **TP3 : Branches et fusion** avec [learnGitBranching](https://learngitbranching.js.org/)
 
-# Cours 3 : Travailler avec un dépôt distant
-
-## Utilisation de Github
+## Cours 4 : Travailler avec un dépôt distant
+* Présentation des dépôts distants et des plateformes de collaboration
+* Introduction à la collaboration avec Git
 * Création d'un dépôt sur Github
 * Collaborer sur un projet Github
 * Issues et Pull request
+* **TP4 : Programming quotes**
 
-## Projet 
-* Présenter les bonnes pratiques en matière de gestion de dépôt, telles que l'utilisation de messages de commit clairs, la création de commits atomiques, la documentation du code, etc.
+### Évaluation
+::: {.callout-important}
+  TP noté individuel portant sur les Cours 1, 2 et 3.
+:::
+
+## Cours 5 : Bonnes pratiques, et fonctionnalités avancées de Git
+* Présenter les bonnes pratiques en matière de gestion de dépôt, telles que l'utilisation de messages de commit clairs, la création de commits atomiques, la documentation du code, etc
 * Expliquer comment maintenir un historique de version propre et organisé
-* Entraînement à l'utilisation de GIT dans le contexte d'un projet à plusieurs personnes. 
+* Entraînement à l'utilisation de GIT dans le contexte d'un projet à plusieurs personnes
+* Introduction à l'intégration continue avec Git/Github
+* **TP5 : Bonnes pratiques et fonctionnalités avancées de Git**
 
+## Cours 6 : Mini projet collaboratif
+* Mise en pratique des concepts vus en cours
+* Travail collaboratif sur un projet de développement sur Github
+
+### Évaluation
+::: {.callout-important}
+  TP noté en collaboratif portant sur l'ensemble des notions vues en cours.
+:::
 
 # Evaluations
-- Dernière séance: TP noté
+- 1 TP noté individuel durant le Cours 4 (50%)
+- 1 TP noté en collaboratif durant le Cours 6 (50%)
 

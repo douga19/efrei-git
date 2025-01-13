@@ -2,6 +2,7 @@
 title: Cours 1 - Introduction au versionnage
 toc: true
 number-sections: true
+lightbox: true
 ---
 
 # Introduction au versionnage
@@ -20,6 +21,7 @@ Une *version* est l'état d'un fichier ou d'un ensemble de fichiers à un moment
 
 ## Pourquoi le versionnage ?
 
+![Pourquoi le versionnage](assets/pourquoi.png)
 
 Le versionnage permet de répondre à plusieurs besoins essentiels dans le développement logiciel, notamment:
 

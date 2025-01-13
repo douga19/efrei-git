@@ -4,8 +4,26 @@ project:
 website:
   title: "Versionning et Repository (xin206 - xdev206)"
   back-to-top-navigation: true
-  navbar:
+  sidebar:
     search: true
+    style: "docked"
+    contents:
+      - text: "Accueil"
+        href: index.qmd 
+      - section: "Cours"
+        contents:
+          - cours1.qmd
+          - cours2.qmd
+          - cours3.qmd
+          - cours4.qmd
+      - section: "TPs"
+        contents:
+          - tp1.qmd
+          - tp2.qmd
+          - tp3.qmd
+          - tp4.qmd
+  
+  navbar:
     right:
       - href: index.qmd
       - text: Cours
@@ -26,6 +44,8 @@ format:
   html:
     page-layout: full
     theme: cosmo
+    highlight:
+      style: github
     linestretch: 1.7
     toc: true
     toc-title: Contenu
