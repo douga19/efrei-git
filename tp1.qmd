@@ -1,5 +1,5 @@
 
-# TP1 - Premiers pas avec Git
+# TP1 - Prise en main de Git
 
 ## 1. Installer Git sur votre machine
 
